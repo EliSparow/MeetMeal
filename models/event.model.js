@@ -13,8 +13,28 @@ const EventSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  timeOfTheEvent: {
+      hour: {
+        type: Integer,
+        min: 0,
+        max: 23,
+        required: true
+      },
+      minute: {
+        type: Integer,
+        min: 0,
+        max: 59,
+        required: true
+      }
+  },
+  typeOfCuisine: {
+    type: String,
+    enum: ['Américaine', 'Argentine', 'Bresilienne', 'Chinoise', 'Espagnole', 'Française', 'Grecque', 'Indienne', 'Italienne', 'Japonaise', 'Libanaise', 'Marocaine', 'Mexicaine', 'Thaïlandaise', 'Péruvien', 'Vegan', 'Végétarienne', 'Vietnamienne', 'Autre'],
+    required: true
+  },
   typeOfMeal: {
     type: String,
+    enum: ['Petit-Déjeuner', 'Brunch', 'Déjeuner', 'Dîner', 'Apéro', 'Pique-Nique'],
     required: true
   },
   descriptionOfTheEvent: {
