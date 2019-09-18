@@ -2,10 +2,11 @@ const jwt = require('jsonwebtoken');
 
 /**
  * This module exports the token set
- * @param req
- * @param res
- * @param next 
- * @exports token
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
  */
 
 module.exports = function(req, res, next) {
