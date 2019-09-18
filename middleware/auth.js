@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 
 /**
- * This function checks if there is a token set
+ * This module exports the token set
  * @param req
  * @param res
- * @param next
- * @return {{token: string}}
+ * @param next 
+ * @exports token
  */
 
 module.exports = function(req, res, next) {
