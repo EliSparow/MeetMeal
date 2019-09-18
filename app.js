@@ -38,6 +38,7 @@ app.use(cors({
 
 // Test Heroku
 app.get('/test', (req,res) => {
+    console.log('test route')
     res.send("<h1>This is Working</h1>")
 })
 
