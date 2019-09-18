@@ -41,5 +41,11 @@ app.get('/test', (req,res) => {
     res.send("<h1>This is Working</h1>")
 })
 
+// const router = express.Router();
+// app.use("/users", router);
+// require(__dirname + "/routes/user.route")(router);
+
 app.use(express.json({extended: false}));
 app.listen(port, () => console.log(`server run on port ${port}`));
+
+// module.exports = app;
