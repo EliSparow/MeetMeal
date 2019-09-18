@@ -18,9 +18,30 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    avatar: {
+        type: String,
+    },
     password: {
         type: String,
         required: true
+    },
+    bio: {
+      type: String
+    },
+    loveStatus: {
+      type: String
+    },
+    zipCode: {
+      type: Integer
+    },
+    address: {
+      type: String
+    },
+    city: {
+      type: String
+    },
+    toquesAvailable: {
+      type: Integer
     }
 });
 
