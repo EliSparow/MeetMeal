@@ -1,5 +1,13 @@
 const jwt = require('jsonwebtoken');
 
+/**
+ * This function checks if there is a token set
+ * @param req
+ * @param res
+ * @param next
+ * @return {{token: string}}
+ */
+
 module.exports = function(req, res, next) {
 
     // Get token from header
