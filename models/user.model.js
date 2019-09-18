@@ -42,6 +42,10 @@ const UserSchema = new mongoose.Schema({
     },
     toquesAvailable: {
       type: Integer
+    },
+    admin: {
+        type: Boolean,
+        default: false
     }
 });
 

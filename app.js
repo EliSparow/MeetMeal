@@ -36,5 +36,10 @@ app.use(cors({
     }
 }));
 
+// Test Heroku
+app.get('/test', (req,res) => {
+    res.send("<h1>This is Working</h1>")
+})
+
 app.use(express.json({extended: false}));
 app.listen(port, () => console.log(`server run on port ${port}`));
