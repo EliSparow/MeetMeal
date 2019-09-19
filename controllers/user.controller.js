@@ -10,7 +10,7 @@ const { check } = require('express-validator');
  * @returns
  */
 
-async function register(req, res) {
+exports.register = async function(req, res) {
     const { firstname, lastname, age, email, password } = req.body;
 
     if (!firstname || !lastname || !age || !email || !password) {
@@ -19,7 +19,7 @@ async function register(req, res) {
         });
     };
 
-    if (typeOf(age) !== 'number') {
+    if (typeof(age) !== 'number') {
         return res.status(400).json({
             msg: 'Veuillez entrer un age valide'
         })
@@ -48,7 +48,7 @@ async function register(req, res) {
             lastname,
             age,
             email,
-            password 
+            password
         });
 
         const salt = await bcrypt.genSalt(10);
@@ -56,9 +56,10 @@ async function register(req, res) {
         user.password = await bcrypt.hash(password, salt);
 
         await user.save();
+        return res.status(200).send( user );
+
     } catch (err) {
-        console.log
+        console.error(err);
     }
 }
 
-exports.register = register;
