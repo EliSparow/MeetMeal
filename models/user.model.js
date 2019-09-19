@@ -41,7 +41,7 @@ const UserSchema = new mongoose.Schema({
       type: String
     },
     toquesAvailable: {
-      type: Integer
+      type: Number
     },
     admin: {
         type: Boolean,
