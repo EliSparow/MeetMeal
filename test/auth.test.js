@@ -31,7 +31,7 @@ describe("/POST User", () => {
             firstname: "userTest1",
             lastname: "USERTEST1",
             age: 18,
-            email: "userTest10@userTest.fr",
+            email: "userTest11@userTest.fr",
             password: "userTest"
         };
         chai
