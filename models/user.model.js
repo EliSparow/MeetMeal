@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
       type: String
     },
     zipCode: {
-      type: Integer
+      type: Number
     },
     address: {
       type: String
@@ -41,7 +41,7 @@ const UserSchema = new mongoose.Schema({
       type: String
     },
     toquesAvailable: {
-      type: Integer
+      type: Number
     },
     admin: {
         type: Boolean,

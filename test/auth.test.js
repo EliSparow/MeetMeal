@@ -10,7 +10,7 @@ describe("/POST User", () => {
         let user = {
             firstname: "userTest",
             lastname: "USERTEST",
-            dateOfBirth: "2002-12-09",
+            age: 18,
             password: "userTest"
         };
         chai
@@ -20,10 +20,31 @@ describe("/POST User", () => {
             .end((err, res) => {
                 res.should.have.status(400);
                 res.body.should.be.a("object");
-                res.body.should.have.property("errors");
-                res.body.errors.should.have.property("email");
-                res.body.errors.email.should.have.property("kind").eql("required");
+                res.body.should.have.property("msg").eql("Tous les champs sont obligatoires.");
+                // res.body.errors.should.have.property("email");
+                // res.body.errors.email.should.have.property("kind").eql("required");
                 done();
         });
     });
-})
+    it("it should POST a product", done => {
+        let user = {
+            firstname: "userTest1",
+            lastname: "USERTEST1",
+            age: 18,
+            email: "userTest11@userTest.fr",
+            password: "userTest"
+        };
+        chai
+            .request(server)
+            .post("/users/register")
+            .send(user)
+            .end((err, res) => {
+                if (err) done(err);
+                console.log(res.body);
+                res.should.have.status(200);
+                // res.body.should.be.a("object");
+                // console.log(res.body);
+                done();
+            });
+    })
+});

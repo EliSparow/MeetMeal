@@ -6,8 +6,11 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
 
+
+
 //files requirement
 const connectDb = require('./config/connectDb');
+const user = require("./routes/user.route");
 
 //port requirement 
 const port = process.env.PORT;
@@ -41,5 +44,9 @@ app.get('/test', (req,res) => {
     res.send("<h1>This is Working</h1>")
 })
 
+app.use("/users", user);
+
 app.use(express.json({extended: false}));
 app.listen(port, () => console.log(`server run on port ${port}`));
+
+module.exports = app;
