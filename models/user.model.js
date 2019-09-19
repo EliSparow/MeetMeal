@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
       type: String
     },
     zipCode: {
-      type: Integer
+      type: Number
     },
     address: {
       type: String

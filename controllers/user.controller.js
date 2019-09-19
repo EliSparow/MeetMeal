@@ -10,7 +10,7 @@ const { check } = require('express-validator');
  * @returns
  */
 
-async function register(req, res) {
+exports.register = async function(req, res) {
     const { firstname, lastname, age, email, password } = req.body;
 
     if (!firstname || !lastname || !age || !email || !password) {
@@ -48,12 +48,14 @@ async function register(req, res) {
             lastname,
             age,
             email,
-            password 
+            password
         });
 
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
         await user.save();
+        return res.status(200).send( user );
+
     } catch (err) {
         console.log(err);
         res.status(500).send('Erreurs serveur');
@@ -68,7 +70,7 @@ async function register(req, res) {
  * @returns
  */
 
-async function login(req, res) {
+exports.login = async function(req, res) {
     const { email, password } = req.body;
 
     if (!email) {
@@ -104,6 +106,3 @@ async function login(req, res) {
         res.status(500).send('Erreurs serveur');
     }
 }
-
-exports.register = register;
-exports.login = login;
