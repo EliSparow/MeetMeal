@@ -52,14 +52,57 @@ exports.register = async function(req, res) {
         });
 
         const salt = await bcrypt.genSalt(10);
-
         user.password = await bcrypt.hash(password, salt);
-
         await user.save();
         return res.status(200).send( user );
 
     } catch (err) {
-        console.error(err);
+        console.log(err);
+        res.status(500).send('Erreurs serveur');
     }
 }
 
+/**
+ * This functions logged an user if every credentials are valide
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
+
+exports.login = async function(req, res) {
+    const { email, password } = req.body;
+
+    if (!email) {
+        return res.status(400).json({
+            msg: 'Email necessaire'
+        });
+    }
+
+    if (!password) {
+        return res.status(400).json({
+            msg: 'Mot de passe necessaire'
+        });
+    }
+
+    try {
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({
+                msg: 'Utilisateur inconnu'
+            });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({
+                msg: 'Mot de passe invalide'
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Erreurs serveur');
+    }
+}
