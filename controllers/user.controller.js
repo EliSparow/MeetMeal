@@ -1,6 +1,7 @@
 const User = require('../models/user.model.js');
 const bcrypt = require('bcrypt');
 const { check } = require('express-validator');
+const jwt = require('jsonwebtoken');
 
 /**
  * This function registered an user if every credentials are valide
