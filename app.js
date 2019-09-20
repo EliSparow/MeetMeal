@@ -24,7 +24,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var allowedOrigins = ['http://localhost:8080'];
+var allowedOrigins = ['http://localhost:3000', 'https://meetmeal.netlify.com'];
 app.use(cors({
     origin: function(origin, callback) {
         if (!origin)
