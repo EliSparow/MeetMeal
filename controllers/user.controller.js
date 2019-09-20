@@ -52,21 +52,7 @@ exports.register = async function(req, res) {
         user.password = await bcrypt.hash(password, salt);
         await user.save();
 
-        const payload = {
-            user: {
-                id: user.id
-            }
-        }
-
-        jwt.sign(
-            payload,
-            process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
-                if (err) throw err;
-                res.json({ token });
-            }
-        );
-
-        return res.status(200).send( user );
+        res.status(200).json({ user });
     } catch (err) {
         console.log(err);
         res.status(500).send('Erreurs serveur');
@@ -124,7 +110,7 @@ exports.login = async function(req, res) {
             process.env.JWT_SECRET, { expiresIn: 360000 },
             (err, token) => {
                 if (err) throw err;
-                res.json({ token });
+                res.status(200).json({ token });
             }
         );
     } catch (err) {
@@ -132,3 +118,37 @@ exports.login = async function(req, res) {
         res.status(500).send('Erreurs serveur');
     }
 }
+
+/**
+ * Get profile of the user connected
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+
+exports.profile = async function(req, res) {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        res.json(user);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Erreur serveur');
+    }
+}
+
+// exports.updateProfile = async function(req, res) {
+//     const {
+//         firstname,
+//         lastname,
+//         age,
+//         email,
+//         password,
+//         avatar,
+//         bio,
+//         loveStatus,
+//         zipCode,
+//         adress,
+//         city,
+//         toquesAvailable
+//     } = req.body;
+// }
