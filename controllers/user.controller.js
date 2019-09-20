@@ -19,11 +19,7 @@ exports.register = async function(req, res) {
         });
     };
 
-    if (typeof(age) !== 'number') {
-        return res.status(400).json({
-            msg: 'Veuillez entrer un age valide'
-        })
-    };
+    check('age', 'Veuillez entrer un age valide').isInt()
 
     if (age < 18) {
         return res.status(400).json({
