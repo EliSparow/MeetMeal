@@ -30,7 +30,7 @@ describe("/POST User", () => {
         let user = {
             firstname: "userTest1",
             lastname: "USERTEST1",
-            age: 18,
+            age: 30,
             email: "userTest11@userTest.fr",
             password: "userTest"
         };
