@@ -19,7 +19,7 @@ exports.register = async function(req, res) {
         });
     };
 
-    check('age', 'Veuillez entrer un age valide').isInt()
+    check('age', 'Veuillez entrer un age valide').isInt();
 
     if (age < 18) {
         return res.status(400).json({
@@ -59,7 +59,7 @@ exports.register = async function(req, res) {
 
         jwt.sign(
             payload,
-            config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
+            process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
                 if (err) throw err;
                 res.json({ token });
             }
@@ -120,7 +120,7 @@ exports.login = async function(req, res) {
 
         jwt.sign(
             payload,
-            config.get('jwtSecret'), { expiresIn: 360000 },
+            process.env.JWT_SECRET, { expiresIn: 360000 },
             (err, token) => {
                 if (err) throw err;
                 res.json({ token });
