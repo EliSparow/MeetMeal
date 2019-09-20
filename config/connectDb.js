@@ -9,8 +9,12 @@ const connectDb = async() => {
             useCreateIndex: true,
             useUnifiedTopology: true
         });
-
-        console.log('You are now connected to the database');
+        if(db == 'mongodb+srv://test:test@cluster0-9dtje.mongodb.net/test?retryWrites=true&w=majority'){
+            console.log('You are now connected to the TEST database');
+        }else {
+            console.log('You are now connected to the MAIN database');
+        }
+        
 
     } catch (err) {
         console.error(err.message);
