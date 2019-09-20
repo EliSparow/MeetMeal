@@ -26,25 +26,45 @@ describe("/POST User", () => {
                 done();
         });
     });
-    it("it should POST a product", done => {
+//     it("it should POST a user", done => {
+//         let user = {
+//             firstname: "userTest1",
+//             lastname: "USERTEST1",
+//             age: 30,
+//             email: "userTest11@userTest.fr",
+//             password: "userTest"
+//         };
+//         chai
+//             .request(server)
+//             .post("/users/register")
+//             .send(user)
+//             .end((err, res) => {
+//                 if (err) done(err);
+//                 console.log(res.body);
+//                 res.should.have.status(200);
+//                 // res.body.should.be.a("object");
+//                 // console.log(res.body);
+//                 done();
+//             });
+//     })
+});
+
+describe("/POST User", () => {
+    it("it should Log a user", done => {
         let user = {
-            firstname: "userTest1",
-            lastname: "USERTEST1",
-            age: 30,
-            email: "userTest11@userTest.fr",
-            password: "userTest"
+            email: "maxim3andr3@gmail.com",
+            password: "monpassword"
         };
         chai
             .request(server)
-            .post("/users/register")
+            .post("/users/login")
             .send(user)
             .end((err, res) => {
                 if (err) done(err);
-                console.log(res.body);
                 res.should.have.status(200);
-                // res.body.should.be.a("object");
-                // console.log(res.body);
+                res.body.should.be.a("object");
+                res.body.should.property("token");
                 done();
-            });
+            })
     })
-});
+})
