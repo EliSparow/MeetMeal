@@ -152,3 +152,21 @@ exports.profile = async function(req, res) {
 //         toquesAvailable
 //     } = req.body;
 // }
+
+
+/**
+ * Get listUsers
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+
+exports.listUsers = async function(req, res) {
+    try {
+        const users = await User.find().select('-password');
+        res.json(users);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Erreur serveur');
+    }
+}
