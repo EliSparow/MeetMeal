@@ -54,8 +54,22 @@ exports.register = async function(req, res) {
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
         await user.save();
-        return res.status(200).send( user );
 
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
+
+        jwt.sign(
+            payload,
+            config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
+                if (err) throw err;
+                res.json({ token });
+            }
+        );
+
+        return res.status(200).send( user );
     } catch (err) {
         console.log(err);
         res.status(500).send('Erreurs serveur');
@@ -101,6 +115,21 @@ exports.login = async function(req, res) {
                 msg: 'Mot de passe invalide'
             });
         }
+
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
+
+        jwt.sign(
+            payload,
+            config.get('jwtSecret'), { expiresIn: 360000 },
+            (err, token) => {
+                if (err) throw err;
+                res.json({ token });
+            }
+        );
     } catch (err) {
         console.log(err);
         res.status(500).send('Erreurs serveur');
