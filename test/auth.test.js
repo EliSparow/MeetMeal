@@ -5,8 +5,8 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
-describe("/POST User", () => {
-    it("it should not POST a User without email field", done => {
+describe("/Register User", () => {
+    it("it should not Register a User without email field", done => {
         let user = {
             firstname: "userTest",
             lastname: "USERTEST",
@@ -26,7 +26,7 @@ describe("/POST User", () => {
                 done();
         });
     });
-    it("it should POST a user", done => {
+    it("it should REGISTER a user", done => {
         let user = {
             firstname: "userTest1",
             lastname: "USERTEST1",
@@ -41,7 +41,7 @@ describe("/POST User", () => {
             .end((err, res) => {
                 if (err) done(err);
                 // console.log(res.body);
-                res.should.have.status(200);                
+                res.should.have.status(200);
                 // res.body.should.be.a("object");
                 // console.log(res.body);
                 done();
@@ -49,7 +49,7 @@ describe("/POST User", () => {
     })
 });
 
-describe("/POST User", () => {
+describe("/Login User", () => {
     it("it should Log a user", done => {
         let user = {
             email: "maxim3andr3@gmail.com",
@@ -65,6 +65,20 @@ describe("/POST User", () => {
                 res.body.should.be.a("object");
                 res.body.should.property("token");
                 done();
-            })
-    })
-})
+            });
+    });
+});
+
+describe("/GET All Users", () => {
+    it("it should show all User", done => {
+        chai
+            .request(server)
+            .get("/users/")
+            .end((err, res) => {
+                if (err) done(err);
+                res.should.have.status(200);
+                res.body.should.be.a("array");
+                done();
+            });
+    });
+});
