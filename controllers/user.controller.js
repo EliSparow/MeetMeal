@@ -170,3 +170,29 @@ exports.listUsers = async function(req, res) {
         res.status(500).send('Erreur serveur');
     }
 }
+/**
+  * Delete User by ID
+  * 
+  * @param {*} req
+  * @param {*} res
+  * 
+  * @desc Delete User by ID
+  * @access Private
+ */
+exports.deleteUser = async function(req, res) {
+    try {
+        const user = await User.findById(req.params.id);
+
+        // Check if user exists:
+        if(!user){
+            return res.status(404).json({ msg: 'Utilisateur inconnu' });
+        }
+
+        await user.remove();
+        res.status(200).json({ msg: 'Utilisateur Supprime' });
+
+    } catch(err){
+        console.error(err);
+        res.status(500).send('Erreur Serveur');
+    }
+}
