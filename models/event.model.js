@@ -40,27 +40,16 @@ const EventSchema = new mongoose.Schema({
   descriptionOfTheEvent: {
     type: String
   },
-  menu: [
-        {
-          starter: {
-            type: String
-          },
-          dish: {
-            type: String
-          },
-          dessert: {
-            type: String
-          },
-          drinks: {
-            type: String
-          },
-          other: {
-            type: [String]
-          }
-      }],
-  ingredients: {
-    type: [String],
+  menu: {
+    type: String
   },
+  allergens: [
+    {
+      allergen: {
+        type: String,
+      }
+    }
+  ],
   zipCodeOfTheEvent: {
     type: Integer,
     required: true
@@ -73,12 +62,17 @@ const EventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  numberOfGuests: {
+  numberMaxOfGuests: {
     type: Integer,
     required: true
   },
-  numberOfSubscribedGuests: {
-    type: Integer,
-  }
+  guests: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+      }
+    }
+  ]
 });
 module.exports = Event = mongoose.model('event', EventSchema);
