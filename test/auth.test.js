@@ -32,24 +32,24 @@ describe("/Register User", () => {
                 done();
             });
     });
-        it("it should REGISTER a user", done => {
-            let user = {
-    firstname: "userTest1",
-    lastname: "USERTEST1",
-    age: 30,
-    email: "userTest7@userTest.fr",
-    password: "userTest"
-            };
-            chai
-                .request(server)
-                .post("/users/register")
-                .send(user)
-                .end((err, res) => {
-                    if (err) done(err);
-                    res.should.have.status(200);
-                    done();
-                });
-        })
+    //     it("it should REGISTER a user", done => {
+    //         let user = {
+    // firstname: "userTest1",
+    // lastname: "USERTEST1",
+    // age: 30,
+    // email: "userTest7@userTest.fr",
+    // password: "userTest"
+    //         };
+    //         chai
+    //             .request(server)
+    //             .post("/users/register")
+    //             .send(user)
+    //             .end((err, res) => {
+    //                 if (err) done(err);
+    //                 res.should.have.status(200);
+    //                 done();
+    //             });
+    //     })
 });
 
 // describe("/Login User", () => {
@@ -130,7 +130,6 @@ describe("/GET/my-profile", () => {
                         .request(server)
                         .get("/users/my-profile")
                         .set('x-auth-token',token)
-                        .send({ 'x-auth-token': token })
                         .end((err, res) => {
                             res.should.have.status(200);
                             res.body.should.be.a("object");
@@ -145,31 +144,35 @@ describe("/GET/my-profile", () => {
     });
 });
 
-// describe("/PUT/my-profile/:id", () => {
-//     it("it should update a user given by ID and X-auth-token", done => {
-//         const email = "userTest7@userTest.fr";
+describe("/PUT/my-profile/:id", () => {
+    it("it should update a user given by ID and X-auth-token", done => {
+        const email = "userTest7@userTest.fr";
 
-//         User.findOne({ email }, (err, user) => {
-//             const payload = {
-//                 user: user.id
-//             }
-//             jwt.sign(
-//                 payload,
-//                 process.env.JWT_SECRET, { expiresIn: 360000 },
-//                 (err, token) => {
-//                     chai
-//                         .request(server)
-//                         .put("/users/my-profile/" + user.id)
-//                         .set('x-auth-token', token)
-//                         .send({ 'lastname': 'TESTOK' })
-//                         .end((err, res) => {
-//                             res.should.have.status(200);
-//                             res.body.should.be.a("object");
-//                             res.body.should.have.property("lastname").eql("TESTOK");
-//                             done();
-//                         });
-//                 });
-//         });
-//     });
-// });
+        let userUpdate = {
+            firstname: "TestOK"
+        }
+
+        User.findOne({ email }, (err, user) => {
+            const payload = {
+                user: user.id
+            }
+            jwt.sign(
+                payload,
+                process.env.JWT_SECRET, { expiresIn: 360000 },
+                (err, token) => {
+                    chai
+                        .request(server)
+                        .put("/users/" + user.id)
+                        .set('x-auth-token', token)
+                        .send(userUpdate)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a("object");
+                            res.body.should.have.property("firstname").eql("TestOK");
+                            done();
+                        });
+                });
+        });
+    });
+});
 
