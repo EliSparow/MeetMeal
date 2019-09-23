@@ -129,29 +129,70 @@ exports.login = async function(req, res) {
 exports.profile = async function(req, res) {
     try {
         const user = await User.findById(req.user.id).select('-password');
-        res.json(user);
+        res.json(user);user
     } catch (err) {
         console.error(err);
         res.status(500).send('Erreur serveur');
     }
 }
 
-// exports.updateProfile = async function(req, res) {
-//     const {
-//         firstname,
-//         lastname,
-//         age,
-//         email,
-//         password,
-//         avatar,
-//         bio,
-//         loveStatus,
-//         zipCode,
-//         adress,
-//         city,
-//         toquesAvailable
-//     } = req.body;
-// }
+exports.updateProfile = async function(req, res) {
+    const {
+        firstname,
+        lastname,
+        age,
+        email,
+        password,
+        avatar,
+        bio,
+        loveStatus,
+        zipCode,
+        adress,
+        city,
+        toquesAvailable
+    } = req.body;
+
+    const userProfile = {};
+
+    userProfile.user = req.user.id;
+
+    if(firstname) userProfile.firstname = firstname;
+    if(lastname) userProfile.lastname = lastname;
+    if(age) userProfile.age = age;
+    if(email) userProfile.email = email;
+    if(password) {
+        const salt = await bcrypt.genSalt(10);
+        newPassword = await bcrypt.hash(password, salt);
+        userProfile.password = newPassword;
+    };
+    if(avatar) userProfile.avatar = avatar;
+    if(bio) userProfile.bio = bio;
+    if(loveStatus) userProfile.loveStatus = loveStatus;
+    if(zipCode) userProfile.zipCode = zipCode;
+    if(adress) userProfile.adress = adress;
+    if(city) userProfile.city = city;
+    if(toquesAvailable) userProfile.toquesAvailable = toquesAvailable;
+
+    try {
+        let user = await User.findOne({ _id: req.params.id });
+
+        if (user) {
+            if(user.email === userProfile.email) {
+                return res.status(400).json({
+                    msg: "Email deja utilise"
+                });
+            }
+
+            user = await User.findOneAndUpdate({ _id: req.params.id }, { $set: userProfile });
+            user = await User.findOne({ _id: req.params.id });
+            res.json(user);
+        }
+    } catch (err) {
+        return res.status(400).json({
+            msg: "Erreurs serveur"
+        })
+    }
+}
 
 
 /**
