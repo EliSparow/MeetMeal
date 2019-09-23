@@ -1,6 +1,9 @@
 //User Model
 let User = require("../models/user.model");
 
+//jwt for token
+const jwt = require('jsonwebtoken');
+
 //Mocha, Chai, chaiHttp Test
 let chai = require("chai");
 let chaiHttp = require("chai-http");
@@ -29,24 +32,24 @@ describe("/Register User", () => {
                 done();
             });
     });
-        it("it should REGISTER a user", done => {
-            let user = {
-    firstname: "userTest1",
-    lastname: "USERTEST1",
-    age: 30,
-    email: "userTest7@userTest.fr",
-    password: "userTest"
-            };
-            chai
-                .request(server)
-                .post("/users/register")
-                .send(user)
-                .end((err, res) => {
-                    if (err) done(err);
-                    res.should.have.status(200);
-                    done();
-                });
-        })
+    //     it("it should REGISTER a user", done => {
+    //         let user = {
+    // firstname: "userTest1",
+    // lastname: "USERTEST1",
+    // age: 30,
+    // email: "userTest7@userTest.fr",
+    // password: "userTest"
+    //         };
+    //         chai
+    //             .request(server)
+    //             .post("/users/register")
+    //             .send(user)
+    //             .end((err, res) => {
+    //                 if (err) done(err);
+    //                 res.should.have.status(200);
+    //                 done();
+    //             });
+    //     })
 });
 
 // describe("/Login User", () => {
@@ -93,8 +96,6 @@ describe("/DELETE/:id User", () => {
             email: "userTest8@userTest.fr",
             password: "userTest"
         });
-        console.log(user);
-        
         user.save((err, user) => {
             chai
                 .request(server)
@@ -110,3 +111,68 @@ describe("/DELETE/:id User", () => {
             });
     });
 });
+
+describe("/GET/my-profile", () => {
+    it("it should get a User given the x-auth-token", done => {
+        const email= "userTest7@userTest.fr";
+
+        User.findOne({ email }, (err, user) => {
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            }
+            jwt.sign(
+                payload,
+                process.env.JWT_SECRET, { expiresIn: 360000 },
+                (err, token) => {
+                    chai
+                        .request(server)
+                        .get("/users/my-profile")
+                        .set('x-auth-token',token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a("object");
+                            res.body.should.have.property("lastname").eql("USERTEST1");
+                            done();
+                        });
+                }
+            )
+        })
+
+        
+    });
+});
+
+describe("/PUT/my-profile/:id", () => {
+    it("it should update a user given by ID and X-auth-token", done => {
+        const email = "userTest7@userTest.fr";
+
+        let userUpdate = {
+            firstname: "TestOK"
+        }
+
+        User.findOne({ email }, (err, user) => {
+            const payload = {
+                user: user.id
+            }
+            jwt.sign(
+                payload,
+                process.env.JWT_SECRET, { expiresIn: 360000 },
+                (err, token) => {
+                    chai
+                        .request(server)
+                        .put("/users/" + user.id)
+                        .set('x-auth-token', token)
+                        .send(userUpdate)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a("object");
+                            res.body.should.have.property("firstname").eql("TestOK");
+                            done();
+                        });
+                });
+        });
+    });
+});
+
