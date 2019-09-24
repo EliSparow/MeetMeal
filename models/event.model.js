@@ -15,13 +15,13 @@ const EventSchema = new mongoose.Schema({
   },
   timeOfTheEvent: {
       hour: {
-        type: Integer,
+        type: Number,
         min: 0,
         max: 23,
         required: true
       },
       minute: {
-        type: Integer,
+        type: Number,
         min: 0,
         max: 59,
         required: true
@@ -62,7 +62,7 @@ const EventSchema = new mongoose.Schema({
     type: [String],
   },
   zipCodeOfTheEvent: {
-    type: Integer,
+    type: Number,
     required: true
   },
   addressOfTheEvent: {
@@ -74,11 +74,11 @@ const EventSchema = new mongoose.Schema({
     required: true
   },
   numberOfGuests: {
-    type: Integer,
+    type: Number,
     required: true
   },
   numberOfSubscribedGuests: {
-    type: Integer,
+    type: Number,
   }
 });
 module.exports = Event = mongoose.model('event', EventSchema);
