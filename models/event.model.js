@@ -21,7 +21,7 @@ const EventSchema = new mongoose.Schema({
         max: 23,
         required: true
       },
-      minute: {
+      minutes: {
         type: Integer,
         min: 0,
         max: 59,
@@ -38,19 +38,15 @@ const EventSchema = new mongoose.Schema({
     enum: ['Petit-Déjeuner', 'Brunch', 'Déjeuner', 'Dîner', 'Apéro', 'Pique-Nique'],
     required: true
   },
-  descriptionOfTheEvent: {
+  description: {
     type: String
   },
   menu: {
     type: String
   },
-  allergens: [
-    {
-      allergen: {
-        type: String,
-      }
-    }
-  ],
+  allergens: {
+    type: String
+  },
   zipCode: {
     type: Integer,
     required: true
@@ -103,6 +99,10 @@ const EventSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  cost: {
+    type: Integer,
+    required: true
   }
 });
 module.exports = Event = mongoose.model('event', EventSchema);
