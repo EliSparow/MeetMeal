@@ -11,6 +11,7 @@ const app = express();
 //files requirement
 const connectDb = require('./config/connectDb');
 const user = require("./routes/user.route");
+const event = require("./routes/event.route")
 
 //port requirement 
 const port = process.env.PORT;
@@ -45,6 +46,7 @@ app.get('/test', (req,res) => {
 })
 
 app.use("/users", user);
+app.use("/events", event);
 
 app.use(express.json({extended: false}));
 app.listen(port, () => console.log(`server run on port ${port}`));
