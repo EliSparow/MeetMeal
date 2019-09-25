@@ -46,7 +46,6 @@ exports.user = async function(req, res) {
 
 exports.event = async function(req, res) {
     const { searchEvent } =req.body;
-    console.log(searchEvent);
     
     if(!searchEvent) {
         return res.status(400).json({
@@ -77,7 +76,7 @@ exports.event = async function(req, res) {
 
         if(result == "") {
             return res.status(404).json({
-                msg: "Event non trouve"
+                msg: "Evenement non trouve"
             });
         }
         res.status(200).json({ result })
