@@ -12,9 +12,6 @@ const app = express();
 const connectDb = require('./config/connectDb');
 const user = require("./routes/user.route");
 const event = require("./routes/event.route")
-
-const search = require("./routes/search.route");
-
 const search = require("./routes/search.route");
 
 //port requirement 
@@ -51,9 +48,6 @@ app.get('/test', (req,res) => {
 
 app.use("/users", user);
 app.use("/events", event);
-
-app.use("/search", search);
-
 app.use("/search", search);
 
 app.use(express.json({extended: false}));
