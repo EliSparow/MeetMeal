@@ -71,7 +71,7 @@ const EventSchema = new mongoose.Schema({
       },
       status: {
         type: String,
-        enum: ['En attente', 'Accepté', 'Refusé'],
+        enum: ['En attente', 'Accepte', 'Refuse'],
         default: 'En attente'
       }
     }
@@ -93,7 +93,7 @@ const EventSchema = new mongoose.Schema({
   ],
   status: {
     type: String,
-    enum: ['En attente', 'Accepté', 'Refusé'],
+    enum: ['En attente', 'Accepte', 'Refuse'],
     default: 'En attente'
   },
   createdAt: {
