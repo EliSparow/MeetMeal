@@ -3,25 +3,26 @@ const mongoose = require('mongoose');
 const EventSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    required: true
   },
   title: {
     type: String,
     required: true
   },
-  dateOfTheEvent: {
+  date: {
     type: Date,
     required: true
   },
-  timeOfTheEvent: {
+  time: {
       hour: {
-        type: Integer,
+        type: Number,
         min: 0,
         max: 23,
         required: true
       },
-      minute: {
-        type: Integer,
+      minutes: {
+        type: Number,
         min: 0,
         max: 59,
         required: true
@@ -37,35 +38,20 @@ const EventSchema = new mongoose.Schema({
     enum: ['Petit-Déjeuner', 'Brunch', 'Déjeuner', 'Dîner', 'Apéro', 'Pique-Nique'],
     required: true
   },
-  descriptionOfTheEvent: {
+  description: {
     type: String
   },
-  menu: [
-        {
-          starter: {
-            type: String
-          },
-          dish: {
-            type: String
-          },
-          dessert: {
-            type: String
-          },
-          drinks: {
-            type: String
-          },
-          other: {
-            type: [String]
-          }
-      }],
-  ingredients: {
-    type: [String],
+  menu: {
+    type: String
   },
-  zipCodeOfTheEvent: {
-    type: Integer,
+  allergens: {
+    type: String
+  },
+  zipCode: {
+    type: Number,
     required: true
   },
-  addressOfTheEvent: {
+  address: {
     type: String,
     required: true
   },
@@ -73,12 +59,50 @@ const EventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  numberOfGuests: {
-    type: Integer,
+  numberMaxOfGuests: {
+    type: Number,
     required: true
   },
-  numberOfSubscribedGuests: {
-    type: Integer,
+  guests: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+      },
+      status: {
+        type: String,
+        enum: ['En attente', 'Accepté', 'Refusé'],
+        default: 'En attente'
+      }
+    }
+  ],
+  comments: [
+    {
+      content: {
+        type: String
+      },
+      author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
+  status: {
+    type: String,
+    enum: ['En attente', 'Accepté', 'Refusé'],
+    default: 'En attente'
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  cost: {
+    type: Number,
+    required: true
   }
 });
 module.exports = Event = mongoose.model('event', EventSchema);
