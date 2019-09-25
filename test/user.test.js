@@ -1,5 +1,6 @@
 //User Model
 let User = require("../models/user.model");
+let Event = require("../models/event.model");
 
 //jwt for token
 const jwt = require('jsonwebtoken');
@@ -10,6 +11,7 @@ let chaiHttp = require("chai-http");
 let server = require("../app");
 let should = chai.should();
 
+var token = "";
 
 chai.use(chaiHttp);
 
@@ -66,6 +68,7 @@ let user = {
                 if (err) done(err);
                 res.should.have.status(200);
                 res.body.should.be.a("object");
+                token = res.body.token;
                 res.body.should.property("token");
                 done();
             });
@@ -199,4 +202,65 @@ describe("/DELETE/:id User", () => {
             });
         });
     });
+});
+
+// EVENT SECTION 
+
+describe("/Create Event", () => {
+    it("it should not Register an event without tittle field", done => {
+        let event = {
+            date: 2025/05/05,
+            hour: 22,
+            minutes: 18,
+            typeOfCuisine: "Americaine",
+            typeOfMeal: "Diner",
+            description: "lorem ipsum",
+            menu: "lorem ipsum",
+            allergens: "soja",
+            zipCode: 91526,
+            address: "9 rue de paris",
+            city: "Paris",
+            numberMaxOfGuests: 5,
+            cost: 23
+        };
+        chai
+            .request(server)
+            .post("/events/create")
+            .send(event)
+            .set('x-auth-token', token )
+            .end((err, res) => {
+                res.should.have.status(400);
+                res.body.should.be.a("object");
+                res.body.should.have.property("msg");
+                done();
+            });
+    });
+    it("it should CREATE an event", done => {
+        let event = {
+            title: "burgers",
+            date: 2023/05/05,
+            hour: 22,
+            minutes: 18,
+            typeOfCuisine: "Americaine",
+            typeOfMeal: "Diner",
+            description: "lorem ipsum",
+            menu: "lorem ipsum",
+            allergens: "soja",
+            zipCode: 91526,
+            address: "9 rue de paris",
+            city: "Paris",
+            numberMaxOfGuests: 5,
+            cost: 23
+        };
+        chai
+            .request(server)
+            .post("/events/create")
+            .send(event)
+            .set('x-auth-token', token )
+            .end((err, res) => {
+                if (err) done(err);
+                res.should.have.status(200);
+                done();
+            });
+    })
 });
