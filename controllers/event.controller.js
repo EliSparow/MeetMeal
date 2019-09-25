@@ -18,7 +18,7 @@ exports.create = async function(req, res) {
 
     if( !title || !date || !hour || !minutes || !typeOfCuisine || !typeOfMeal || !zipCode || !adress || !city || !numberMaxOfGuests || !cost) {
         return res.status(400).json({
-            msg: "Veuillez renseignez au moins tous les champs suivant : "
+            msg: "Veuillez renseignez au moins tous les champs suivant : Titre, Date, Heure, Type de Cuisine, Type de Repas, Code Postal, Adresse"
         })
     }
 
@@ -44,7 +44,9 @@ exports.create = async function(req, res) {
 
     await event.save()
 
-    res.status(200).json(event);  
+    res.status(200).json({
+        msg: 'Event cree'
+    });  
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Erreur serveur');
@@ -66,7 +68,7 @@ exports.listEvents = async function(req, res) {
 
         if(!events) {
             res.status(400).json({
-                msg: 'Aucun événement trouvé'
+                msg: 'Aucun evenement trouve'
             })
         }
         
