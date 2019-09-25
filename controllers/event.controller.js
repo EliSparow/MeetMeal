@@ -13,10 +13,10 @@ const { check } = require('express-validator');
 exports.create = async function(req, res) {
     try {
 
-    const { title, date, hour, minutes, typeOfCuisine, typeOfMeal, description, menu, allergens, zipCode, adress, city, numberMaxOfGuests, cost } = req.body;
+    const { title, date, hour, minutes, typeOfCuisine, typeOfMeal, description, menu, allergens, zipCode, address, city, numberMaxOfGuests, cost } = req.body;
     const user = req.user.id;
 
-    if( !title || !date || !hour || !minutes || !typeOfCuisine || !typeOfMeal || !zipCode || !adress || !city || !numberMaxOfGuests || !cost) {
+    if( !title || !date || !hour || !minutes || !typeOfCuisine || !typeOfMeal || !zipCode || !address || !city || !numberMaxOfGuests || !cost) {
         return res.status(400).json({
             msg: "Veuillez renseignez au moins tous les champs suivant : Titre, Date, Heure, Type de Cuisine, Type de Repas, Code Postal, Adresse"
         })
@@ -36,7 +36,7 @@ exports.create = async function(req, res) {
         menu,
         allergens,
         zipCode,
-        adress,
+        address,
         city,
         numberMaxOfGuests,
         cost
