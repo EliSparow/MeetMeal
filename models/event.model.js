@@ -16,13 +16,13 @@ const EventSchema = new mongoose.Schema({
   },
   time: {
       hour: {
-        type: Integer,
+        type: Number,
         min: 0,
         max: 23,
         required: true
       },
       minutes: {
-        type: Integer,
+        type: Number,
         min: 0,
         max: 59,
         required: true
@@ -48,7 +48,7 @@ const EventSchema = new mongoose.Schema({
     type: String
   },
   zipCode: {
-    type: Integer,
+    type: Number,
     required: true
   },
   address: {
@@ -60,7 +60,7 @@ const EventSchema = new mongoose.Schema({
     required: true
   },
   numberMaxOfGuests: {
-    type: Integer,
+    type: Number,
     required: true
   },
   guests: [
@@ -101,7 +101,7 @@ const EventSchema = new mongoose.Schema({
     default: Date.now
   },
   cost: {
-    type: Integer,
+    type: Number,
     required: true
   }
 });
