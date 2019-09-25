@@ -72,18 +72,36 @@ let user = {
     });
 });
 
-describe("/GET All Users", () => {
+
+describe("//GET All Users", () => {
     it("it should show all User", done => {
-        chai
-            .request(server)
-            .get("/users/")
-            .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWQ4NGE0MjM1MDhkNjMwMDE3OTgxOGE0In0sImlhdCI6MTU2OTA2MDkzMSwiZXhwIjoxNTY5NDIwOTMxfQ.r7mL85S2HE07v6bGuFfxTd-HWpz6bVNhsMAPIQ8-rYk")
-            .end((err, res) => {
-                if (err) done(err);
-                res.should.have.status(200);
-                res.body.should.be.a("array");
-                done();
-            });
+        const email= "userTest7@userTest.fr";
+
+        User.findOne({ email }, (err, user) => {
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            }
+
+            jwt.sign(
+                payload,
+                process.env.JWT_SECRET, { expiresIn: 360000 },
+                (err, token) => {
+                    chai
+                        .request(server)
+                        .get("/users/")
+                        .set('x-auth-token',token)
+                        .end((err, res) => {
+                            if (err) done(err);
+                            res.should.have.status(200);
+                            res.body.should.be.a("array");
+                            done();
+                        });
+                }
+            )
+        })
+
     });
 });
 
@@ -117,7 +135,6 @@ describe("/GET/my-profile", () => {
             )
         })
 
-        
     });
 });
 
