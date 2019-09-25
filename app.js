@@ -15,6 +15,8 @@ const event = require("./routes/event.route")
 
 const search = require("./routes/search.route");
 
+const search = require("./routes/search.route");
+
 //port requirement 
 const port = process.env.PORT;
 
@@ -49,6 +51,8 @@ app.get('/test', (req,res) => {
 
 app.use("/users", user);
 app.use("/events", event);
+
+app.use("/search", search);
 
 app.use("/search", search);
 
