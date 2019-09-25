@@ -114,7 +114,7 @@ describe("/DELETE/:id User", () => {
 
 describe("/GET/my-profile", () => {
     it("it should get a User given the x-auth-token", done => {
-        const email= "userTest7@userTest.fr";
+        const email= "azerty2@azerty.com";
 
         User.findOne({ email }, (err, user) => {
             const payload = {
@@ -122,6 +122,7 @@ describe("/GET/my-profile", () => {
                     id: user.id
                 }
             }
+
             jwt.sign(
                 payload,
                 process.env.JWT_SECRET, { expiresIn: 360000 },
@@ -133,7 +134,7 @@ describe("/GET/my-profile", () => {
                         .end((err, res) => {
                             res.should.have.status(200);
                             res.body.should.be.a("object");
-                            res.body.should.have.property("lastname").eql("USERTEST1");
+                            res.body.should.have.property("lastname").eql("TATA");
                             done();
                         });
                 }
@@ -144,9 +145,9 @@ describe("/GET/my-profile", () => {
     });
 });
 
-describe("/PUT/my-profile/:id", () => {
+describe("/PUT/my-profile/", () => {
     it("it should update a user given by ID and X-auth-token", done => {
-        const email = "userTest7@userTest.fr";
+        const email = "azerty2@azerty.com";
 
         let userUpdate = {
             firstname: "TestOK"
