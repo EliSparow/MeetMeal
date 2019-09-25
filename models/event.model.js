@@ -1,4 +1,4 @@
-const mongoose = reqire('mongoose');
+const mongoose = require('mongoose');
 
 const EventSchema = new mongoose.Schema({
   user: {
