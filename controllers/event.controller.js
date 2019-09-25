@@ -156,3 +156,59 @@ exports.showEvent = async function(req, res) {
          res.status(500).send('Erreur Serveur');
      }
  }
+
+/**
+ * This function validates an event status
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @returns res.json(event)
+ */
+
+exports.validEvent = async function(req, res) {
+    try {
+        const event = await Event.findById(req.params.id);
+
+        if(!event) {
+            return res.status(404).json({
+                msg: 'Evenement non trouve'
+            })
+        }
+
+        event.status = 'Accepte';
+        await event.save();
+
+        res.json(event);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur');
+    }
+}
+
+/**
+ * This function refuses an event status
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @returns res.json(event)
+ */
+
+exports.refuseEvent = async function(req, res) {
+    try {
+        const event = await Event.findById(req.params.id);
+
+        if(!event) {
+            return res.status(404).json({
+                msg: 'Evenement non trouve'
+            })
+        }
+
+        event.status = 'Refuse';
+        await event.save();
+
+        res.json(event);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur');
+    }
+}

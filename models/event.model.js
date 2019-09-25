@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = reqire('mongoose');
 
 const EventSchema = new mongoose.Schema({
   user: {
@@ -30,12 +30,12 @@ const EventSchema = new mongoose.Schema({
   },
   typeOfCuisine: {
     type: String,
-    enum: ['Américaine', 'Argentine', 'Bresilienne', 'Chinoise', 'Espagnole', 'Française', 'Grecque', 'Indienne', 'Italienne', 'Japonaise', 'Libanaise', 'Marocaine', 'Mexicaine', 'Thaïlandaise', 'Péruvien', 'Vegan', 'Végétarienne', 'Vietnamienne', 'Autre'],
+    enum: ['Americaine', 'Argentine', 'Bresilienne', 'Chinoise', 'Espagnole', 'Française', 'Grecque', 'Indienne', 'Italienne', 'Japonaise', 'Libanaise', 'Marocaine', 'Mexicaine', 'Thaïlandaise', 'Peruvien', 'Vegan', 'Vegetarienne', 'Vietnamienne', 'Autre'],
     required: true
   },
   typeOfMeal: {
     type: String,
-    enum: ['Petit-Déjeuner', 'Brunch', 'Déjeuner', 'Dîner', 'Apéro', 'Pique-Nique'],
+    enum: ['Petit-Dejeuner', 'Brunch', 'Dejeuner', 'Dîner', 'Apero', 'Pique-Nique'],
     required: true
   },
   description: {
