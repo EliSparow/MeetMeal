@@ -35,7 +35,7 @@ const EventSchema = new mongoose.Schema({
   },
   typeOfMeal: {
     type: String,
-    enum: ['Petit-Dejeuner', 'Brunch', 'Dejeuner', 'Dîner', 'Apero', 'Pique-Nique'],
+    enum: ['Petit-Dejeuner', 'Brunch', 'Dejeuner', 'Diner', 'Apero', 'Pique-Nique'],
     required: true
   },
   description: {
