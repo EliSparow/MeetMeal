@@ -12,7 +12,6 @@ const Event = require('../models/event.model');
 
 exports.user = async function(req, res) {
     const { searchUser } = req.body;
-    console.log(searchUser);
     
     if(!searchUser) {
         return res.status(400).json({
@@ -27,7 +26,7 @@ exports.user = async function(req, res) {
                     firstname: { $regex: searchUser }
                 }, 
                 {
-                    lastname: { $regex: searchUser.toUpperCase()}
+                    lastname: { $regex: searchUser.toUpperCase() }
                 }
             ] , 
         });
