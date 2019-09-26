@@ -20,7 +20,7 @@ exports.create = async function(req, res) {
 
     if( !title || !date || !hour || !minutes || !typeOfCuisine || !typeOfMeal || !zipCode || !address || !city || !numberMaxOfGuests || !cost) {
         return res.status(400).json({
-            msg: "Veuillez renseignez au moins tous les champs suivant : Titre, Date, Heure, Type de Cuisine, Type de Repas, Code Postal, addresse"
+            msg: "Veuillez renseigner au moins tous les champs suivant : Titre, Date, Heure, Type de Cuisine, Type de Repas, Code Postal, addresse"
         })
     }
 
