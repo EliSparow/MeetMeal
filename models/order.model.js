@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-    userID: {
+    userId: {
         type: mongoose.Schema.Types.ObjectID,
         ref: 'user',
         required : true
     },
-    numberToc: {
+    numberToques: {
         type: Number,
         required : true
     },
-    createdAd: {
+    createdAt: {
         type: Date,
         default: Date.now
     }
