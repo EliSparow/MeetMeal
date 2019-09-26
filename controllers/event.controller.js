@@ -8,6 +8,7 @@ const { check } = require('express-validator');
  * 
  * @param {*} req
  * @param {*} res
+ * @access Private
  * @returns res.json(event)
  */
 
@@ -60,6 +61,7 @@ exports.create = async function(req, res) {
  * 
  * @param {*} req
  * @param {*} res
+ * @access Private
  * @returns res.json(events)
  */
 
@@ -86,6 +88,7 @@ exports.listEvents = async function(req, res) {
  *
  * @param {*} req
  * @param {*} res
+ * @access Private
  * @returns res.json(guests)
  */
 
@@ -121,6 +124,7 @@ exports.addGuest = async function (req, res) {
  *
  * @param {*} req
  * @param {*} res
+ * @access Private
  * @returns res.json(guests)
  */
 
@@ -147,6 +151,7 @@ exports.removeGuest = async function (req, res) {
  *
  * @param {*} req
  * @param {*} res
+ * @acces Private
  * @returns res.json(acceptedGuest[0].status)
  */
 
@@ -173,6 +178,7 @@ exports.acceptGuest = async function (req, res) {
  *
  * @param {*} req
  * @param {*} res
+ * @access Private
  * @returns res.json(acceptedGuest[0].status)
  */
 
@@ -199,6 +205,7 @@ exports.refuseGuest = async function (req, res) {
  * 
  * @param {*} req
  * @param {*} res
+ * @access Private
  * @returns res.json(event)
  */
 
@@ -224,6 +231,7 @@ exports.showEvent = async function(req, res) {
  * 
  * @param {*} req
  * @param {*} res
+ * @access Private
  * @returns res.json(event)
  */
 
@@ -275,6 +283,7 @@ exports.showEvent = async function(req, res) {
  * 
  * @param {*} req
  * @param {*} res
+ * @access Admin
  * @returns res.json(event)
  */
 
@@ -303,6 +312,7 @@ exports.validEvent = async function(req, res) {
  * 
  * @param {*} req
  * @param {*} res
+ * @access Admin
  * @returns res.json(event)
  */
 
