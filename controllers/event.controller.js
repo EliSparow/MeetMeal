@@ -105,7 +105,7 @@ exports.addGuest = async function (req, res) {
                     return res.status(400).json({ msg: 'Vous ne pouvez pas rejoindre votre propre evenement' });
                 }
             } else {
-                return res.status(400).json({ msg: 'Vous etes deja enregistre a cet evenement' });
+                return res.status(400).json({ msg: 'Vous etes deja inscrit a cet evenement' });
             }
         } else {
             return res.status(400).json({ msg: "Nombre maximum d'invites deja atteint" });
@@ -126,16 +126,26 @@ exports.addGuest = async function (req, res) {
 
 exports.removeGuest = async function (req, res) {
     try {
-        const user = req.user.id;
+        const user = await User.findById(req.user.id).select('admin');
         const event = await Event.findById(req.params.id);
         const guests = event.guests;
         const removeIndex = guests.map(guest => guest.userId).indexOf(user);
 
-        if (user.admin || guests.filter(guest => guest.userId === user)) {
-            guests.splice(removeIndex, 1);
-            await event.save();
-            res.json(guests);
+        if(!user) {
+            if(guests.filter(guest => guest.userId === req.user.id).length == 0) {
+                return res.status(404).json({
+                    msg: 'Aucun utilisateur trouve'
+                })
+            }
+            return res.status(401).json({
+                msg: 'Acces refuse'
+            })
         }
+
+        guests.splice(removeIndex, 1);
+        await event.save();
+        res.json(event);
+
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Erreur Serveur');
@@ -152,16 +162,25 @@ exports.removeGuest = async function (req, res) {
 
 exports.acceptGuest = async function (req, res) {
     try {
-        const user = req.user.id;
+        const user = await User.findById(req.user.id).select('admin');
         const event = await Event.findById(req.params.event_id);
         guests = event.guests;
         acceptedGuest = guests.filter(guest => guest.userId == req.params.acceptedGuest_id);
 
-        if (user === event.user || user.admin) {
-            acceptedGuest[0].status = 'Accepté';
-            event.save();
-            res.json(acceptedGuest[0].status);
+        if(!user) {
+            if(event.user.toString() !== req.user.id) {
+                return res.status(401).json({
+                    msg: 'Acces refuse'
+                })
+            }
         }
+
+        acceptedGuest[0].status = 'Accepte';
+        event.save();
+        res.json({
+            msg: 'Utilisateur accepte'
+        });
+
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Erreur Serveur');
@@ -178,16 +197,25 @@ exports.acceptGuest = async function (req, res) {
 
 exports.refuseGuest = async function (req, res) {
     try {
-        const user = req.user.id;
+        const user = await User.findById(req.user.id).select('admin');
         const event = await Event.findById(req.params.event_id);
         guests = event.guests;
         refusedGuest = guests.filter(guest => guest.userId == req.params.refusedGuest_id);
 
-        if (user === event.user || user.admin) {
-            refusedGuest[0].status = 'Refusé';
-            event.save();
-            res.json(refusedGuest[0].status);
+        if(!user) {
+            if(event.user.toString() !== req.user.id) {
+                return res.status(401).json({
+                    msg: 'Acces refuse'
+                })
+            }
         }
+
+        refusedGuest[0].status = 'Refusé';
+        event.save();
+        res.json({
+            msg: 'Utilisateur refuse'
+        });
+
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Erreur Serveur');
@@ -240,26 +268,28 @@ exports.showEvent = async function(req, res) {
         }
 
         // Check on user
-        if(event.user.toString() !== req.user.id || !user) {
-            return res.status(401).json({
-                msg: 'Acces refuse'
-            })
-        } 
+        if(!user) {
+            if(event.user.toString() !== req.user.id) {
+                return res.status(401).json({
+                    msg: 'Acces refuse'
+                })
+            }
+        }
 
-        if(title) event.title = title;
-        if(date) event.date = date;
-        if(hour) event.hour = hour;
-        if(minutes) event.minute = minute;
-        if(typeOfCuisine) event.typeOfCuisine = typeOfCuisine;
-        if(typeOfMeal) event.typeOfMeal = typeOfMeal;
-        if(description) event.description = description;
-        if(menu) event.menu = menu;
-        if(allergens) event.allergens = allergens;
-        if(zipCode) event.zipCode = zipCode;
-        if(address) event.address = address;
-        if(city) event.city = city;
-        if(numberMaxOfGuests) event.numberMaxOfGuests = numberMaxOfGuests;
-        if(cost) event.cost = cost;
+        if(title && event.title != title) event.title = title;
+        if(date && event.date != date) event.date = date;
+        if(hour && event.hour != hour) event.hour = hour;
+        if(minutes && event.minutes != minutes) event.minutes = minutes;
+        if(typeOfCuisine && event.typeOfCuisine != typeOfCuisine) event.typeOfCuisine = typeOfCuisine;
+        if(typeOfMeal && event.typeOfMeal != typeOfMeal) event.typeOfMeal = typeOfMeal;
+        if(description && event.description != description) event.description = description;
+        if(menu && event.menu != menu) event.menu = menu;
+        if(allergens && event.allergens != allergens) event.allergens = allergens;
+        if(zipCode && event.zipCode != zipCode) event.zipCode = zipCode;
+        if(address && event.address != address) event.address = address;
+        if(city && event.city != city) event.city = city;
+        if(numberMaxOfGuests && event.numberMaxOfGuests != numberMaxOfGuests) event.numberMaxOfGuests = numberMaxOfGuests;
+        if(cost && event.cost != cost) event.cost = cost;
 
         await event.save();
 
@@ -323,5 +353,35 @@ exports.refuseEvent = async function(req, res) {
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Erreur Serveur');
+    }
+}
+
+exports.DeleteEvent = async function(res, res) {
+    try {
+        const event = await Event.findById(req.params.id);
+        const user = await User.findById(req.user.id).select('admin');
+    
+        if(!event) {
+            return res.status(404).json({
+                msg: 'Evenement non trouve'
+            })
+        }
+        
+        if(!user) {
+            if(event.user.toString() !== req.user.id) {
+                return res.status(401).json({
+                    msg: 'Acces refuse'
+                })
+            }
+        }
+
+        event.remove();
+        res.json({
+            msg: 'Event supprime'
+        })
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur')
     }
 }
