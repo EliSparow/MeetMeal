@@ -128,9 +128,10 @@ exports.login = async function(req, res) {
  *
  * @param {*} req
  * @param {*} res
+ * @returns json(user)
  */
 
-exports.profile = async function(req, res) {
+exports.myProfile = async function(req, res) {
     try {
         const user = await User.findById(req.user.id).select('-password');
         res.json(user);
@@ -139,6 +140,32 @@ exports.profile = async function(req, res) {
         res.status(500).send('Erreur serveur');
     }
 }
+
+/**
+ * Get profile by ID
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @returns json(user)
+ */
+
+ exports.profile = async function(req, res) {
+     try {
+         const user = await User.findById(req.params.id).select('-password');
+         require.json(user);
+     } catch (err) {
+         console.error(err.message);
+         res.status(500).send('Erreur serveur');
+     }
+ }
+
+ /**
+  * Update profile
+  * 
+  * @param {*} req
+  * @param {*} res
+  * @returns json(user)
+  */
 
 exports.updateProfile = async function(req, res) {
     const {
