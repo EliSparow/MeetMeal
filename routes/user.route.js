@@ -12,4 +12,5 @@ router.get('/:id', auth, UserController.profile);
 router.get('/', auth, UserController.listUsers);
 router.put('/:id', auth, UserController.updateProfile);
 router.delete('/:id', auth, UserController.deleteUser);
+
 module.exports = router;

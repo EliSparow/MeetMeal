@@ -12,6 +12,4 @@ router.put('/:id', auth, EventController.updateEvent);
 router.put('/:id/validate', auth, admin, EventController.validEvent);
 router.put('/:id/refuse', auth, admin, EventController.refuseEvent);
 
-
-
 module.exports = router;
