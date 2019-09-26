@@ -13,6 +13,8 @@ router.get('/:id', auth, EventController.showEvent);
 router.get('/', auth, EventController.listEvents);
 //update event
 router.put('/:id', auth, EventController.updateEvent);
+//delete event
+router.delete('/:id', auth, EventController.DeleteEvent);
 //validate event
 router.put('/:id/validate', auth, admin, EventController.validEvent);
 //refuse event
@@ -22,7 +24,7 @@ router.put('/:id/addGuest', auth, EventController.addGuest);
 //remove guest
 router.put('/:id/removeGuest', auth, EventController.removeGuest);
 //accept guest
-router.put('/:event_id/acceptGuest/:acceptedGuest_id', auth, EventController.acceptGuest);
+router.put('/:event_id/validateGuest/:acceptedGuest_id', auth, EventController.acceptGuest);
 //refuse guest
 router.put('/:event_id/refuseGuest/:refusedGuest_id', auth, EventController.refuseGuest);
 
