@@ -13,6 +13,8 @@ router.get('/:id', auth, EventController.showEvent);
 router.get('/', auth, EventController.listEvents);
 //update event
 router.put('/:id', auth, EventController.updateEvent);
+//delete event
+router.delete('/:id', auth, EventController.DeleteEvent);
 //validate event
 router.put('/:id/validate', auth, admin, EventController.validEvent);
 //refuse event
