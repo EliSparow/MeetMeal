@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
  * @param {*} req
  * @param {*} res
  * @returns
+ * @access Public
  */
 
 exports.register = async function(req, res) {
@@ -69,6 +70,7 @@ exports.register = async function(req, res) {
  * @param {*} req
  * @param {*} res
  * @returns
+ * @access Public
  */
 
 exports.login = async function(req, res) {
@@ -129,6 +131,7 @@ exports.login = async function(req, res) {
  * @param {*} req
  * @param {*} res
  * @returns json(user)
+ * @access Private
  */
 
 exports.myProfile = async function(req, res) {
@@ -147,6 +150,7 @@ exports.myProfile = async function(req, res) {
  * @param {*} req
  * @param {*} res
  * @returns json(user)
+ * @access Private
  */
 
  exports.profile = async function(req, res) {
@@ -165,6 +169,7 @@ exports.myProfile = async function(req, res) {
   * @param {*} req
   * @param {*} res
   * @returns json(user)
+  * @access Private
   */
 
 exports.updateProfile = async function(req, res) {
@@ -224,12 +229,12 @@ exports.updateProfile = async function(req, res) {
     }
 }
 
-
 /**
  * Get listUsers
  *
  * @param {*} req
  * @param {*} res
+ * @access Private
  */
 
 exports.listUsers = async function(req, res) {
@@ -241,6 +246,7 @@ exports.listUsers = async function(req, res) {
         res.status(500).send('Erreur serveur');
     }
 }
+
 /**
   * Delete User by ID
   * 
@@ -250,6 +256,7 @@ exports.listUsers = async function(req, res) {
   * @desc Delete User by ID
   * @access Private
  */
+
 exports.deleteUser = async function(req, res) {
     try {
         const user = await User.findById(req.params.id);
