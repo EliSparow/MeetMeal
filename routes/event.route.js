@@ -24,7 +24,7 @@ router.put('/:id/addGuest', auth, EventController.addGuest);
 //remove guest
 router.put('/:id/removeGuest', auth, EventController.removeGuest);
 //accept guest
-router.put('/:event_id/acceptGuest/:acceptedGuest_id', auth, EventController.acceptGuest);
+router.put('/:event_id/validateGuest/:acceptedGuest_id', auth, EventController.acceptGuest);
 //refuse guest
 router.put('/:event_id/refuseGuest/:refusedGuest_id', auth, EventController.refuseGuest);
 
