@@ -7,7 +7,7 @@ const Event = require('../models/event.model');
   * 
   * @param {*} req
   * @param {*} res
-  * @returns
+  * @returns res.json({ result })
  */
 
 exports.user = async function(req, res) {
@@ -49,7 +49,7 @@ exports.user = async function(req, res) {
  * 
  * @param {*} req
  * @param {*} res
- * @returns 
+ * @returns res.json({ result })
  */
 
 exports.event = async function(req, res) {
