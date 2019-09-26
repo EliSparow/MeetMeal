@@ -366,6 +366,15 @@ exports.refuseEvent = async function(req, res) {
     }
 }
 
+/**
+ * This function delete and event by id
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @access Private
+ * @returns res.json({msg})
+ */
+
 exports.DeleteEvent = async function(res, res) {
     try {
         const event = await Event.findById(req.params.id);
