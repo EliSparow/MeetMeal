@@ -18,4 +18,4 @@ router.delete('/:id', auth, admin, OrderController.deleteOrder);
 //List orders
 router.get('/listorder', auth, admin, OrderController.listOrders);
 
-module.export = router;
+module.exports = router;
