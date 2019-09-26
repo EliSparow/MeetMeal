@@ -152,7 +152,7 @@ exports.myProfile = async function(req, res) {
  exports.profile = async function(req, res) {
      try {
          const user = await User.findById(req.params.id).select('-password');
-         require.json(user);
+         res.json(user);
      } catch (err) {
          console.error(err.message);
          res.status(500).send('Erreur serveur');
