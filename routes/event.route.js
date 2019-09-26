@@ -5,9 +5,10 @@ const auth = require('../middleware/auth');
 const EventController = require('../controllers/event.controller.js');
 
 router.post('/create', auth, EventController.create);
-// router.post('/login', auth, EventController.login);
-// router.get('/my-profile', auth, EventController.profile);
 router.get('/', auth, EventController.listEvents);
-// router.put('/my-profile/:id', auth, EventController.updateProfile);
-// router.delete('/:id', auth, EventController.deleteEvent);
+router.put('/:id/addGuest', auth, EventController.addGuest);
+router.put('/:id/removeGuest', auth, EventController.removeGuest);
+router.put('/:event_id/acceptGuest/:acceptedGuest_id', auth, EventController.acceptGuest);
+router.put('/:event_id/refuseGuest/:refusedGuest_id', auth, EventController.refuseGuest);
+
 module.exports = router;
