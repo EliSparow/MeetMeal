@@ -6,11 +6,11 @@ const orderSchema = new mongoose.Schema({
         ref: 'user',
         required : true
     },
-    numberToc: {
+    numberToques: {
         type: Number,
         required : true
     },
-    createdAd: {
+    createdAt: {
         type: Date,
         default: Date.now
     }
