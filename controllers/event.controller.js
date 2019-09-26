@@ -141,9 +141,6 @@ exports.removeGuest = async function (req, res) {
                     msg: 'Aucun utilisateur trouve'
                 })
             }
-            return res.status(401).json({
-                msg: 'Acces refuse'
-            })
         }
 
         guests.splice(removeIndex, 1);
