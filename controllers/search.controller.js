@@ -45,7 +45,7 @@ exports.user = async function(req, res) {
 }
 
 /**
- *  This function search an user
+ *  This function search an event
  * 
  * @param {*} req
  * @param {*} res
