@@ -7,6 +7,7 @@ const User = require('../models/user.model.js');
  * @param {*} res
  * @param {*} next
  */
+
 module.exports = async function(req, res, next) {
     let user = await User.findById(req.user.id);
     if(user.admin) {
