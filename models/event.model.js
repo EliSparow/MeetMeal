@@ -30,12 +30,12 @@ const EventSchema = new mongoose.Schema({
   },
   typeOfCuisine: {
     type: String,
-    enum: ['Américaine', 'Argentine', 'Bresilienne', 'Chinoise', 'Espagnole', 'Française', 'Grecque', 'Indienne', 'Italienne', 'Japonaise', 'Libanaise', 'Marocaine', 'Mexicaine', 'Thaïlandaise', 'Péruvien', 'Vegan', 'Végétarienne', 'Vietnamienne', 'Autre'],
+    enum: ['Americaine', 'Argentine', 'Bresilienne', 'Chinoise', 'Espagnole', 'Française', 'Grecque', 'Indienne', 'Italienne', 'Japonaise', 'Libanaise', 'Marocaine', 'Mexicaine', 'Thaïlandaise', 'Peruvien', 'Vegan', 'Vegetarienne', 'Vietnamienne', 'Autre'],
     required: true
   },
   typeOfMeal: {
     type: String,
-    enum: ['Petit-Déjeuner', 'Brunch', 'Déjeuner', 'Dîner', 'Apéro', 'Pique-Nique'],
+    enum: ['Petit-Dejeuner', 'Brunch', 'Dejeuner', 'Diner', 'Apero', 'Pique-Nique'],
     required: true
   },
   description: {
@@ -71,7 +71,7 @@ const EventSchema = new mongoose.Schema({
       },
       status: {
         type: String,
-        enum: ['En attente', 'Accepté', 'Refusé'],
+        enum: ['En attente', 'Accepte', 'Refuse'],
         default: 'En attente'
       }
     }
@@ -93,7 +93,7 @@ const EventSchema = new mongoose.Schema({
   ],
   status: {
     type: String,
-    enum: ['En attente', 'Accepté', 'Refusé'],
+    enum: ['En attente', 'Accepte', 'Refuse'],
     default: 'En attente'
   },
   createdAt: {

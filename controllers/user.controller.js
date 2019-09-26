@@ -12,27 +12,29 @@ const jwt = require('jsonwebtoken');
  */
 
 exports.register = async function(req, res) {
-    const { firstname, lastname, age, email, password } = req.body;
-
-    if (!firstname || !lastname || !age || !email || !password) {
-        return res.status(400).json({
-            msg: "Tous les champs sont obligatoires."
-        });
-    };
-
-    check('age', 'Veuillez entrer un age valide').isInt();
-
-    if (age < 18) {
-        return res.status(400).json({
-            msg: "Vous devez avoir 18 ans ou plus pour vous inscrire au site"
-        })
-    };
-
-    check('email', 'Votre email est invalide').isEmail();
-    check('password', 'Le mot de passe doit avoir entre 6 et 20 caracteres').isLength({ min: 6, max: 20 });
-
     try {
+
+        let { firstname, lastname, age, email, password } = req.body;
+
+        if (!firstname || !lastname || !age || !email || !password) {
+            return res.status(400).json({
+                msg: "Tous les champs sont obligatoires."
+            });
+        };
+
+        check('age', 'Veuillez entrer un age valide').isInt();
+
+        if (age < 18) {
+            return res.status(400).json({
+                msg: "Vous devez avoir 18 ans ou plus pour vous inscrire au site"
+            })
+        };
+
+        check('email', 'Votre email est invalide').isEmail();
+        check('password', 'Le mot de passe doit avoir entre 6 et 20 caracteres').isLength({ min: 6, max: 20 });
+
         let user = await User.findOne({ email });
+        lastname = lastname.toUpperCase();
 
         if (user) {
             return res.status(400).json({
@@ -52,10 +54,12 @@ exports.register = async function(req, res) {
         user.password = await bcrypt.hash(password, salt);
         await user.save();
 
-        res.status(200).json({ user });
+        res.status(200).json({
+            msg: 'Utilisateur enregistre'
+        });
     } catch (err) {
-        console.log(err);
-        res.status(500).send('Erreurs serveur');
+        console.error(err);
+        res.status(500).send('Erreur serveur');
     }
 }
 
@@ -110,12 +114,12 @@ exports.login = async function(req, res) {
             process.env.JWT_SECRET, { expiresIn: 360000 },
             (err, token) => {
                 if (err) throw err;
-                res.status(200).json({ token });
+                res.status(200).json({token });
             }
         );
     } catch (err) {
-        console.log(err);
-        res.status(500).send('Erreurs serveur');
+        console.error(err.message);
+        res.status(500).send('Erreur serveur');
     }
 }
 
@@ -131,7 +135,7 @@ exports.profile = async function(req, res) {
         const user = await User.findById(req.user.id).select('-password');
         res.json(user);
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
         res.status(500).send('Erreur serveur');
     }
 }
@@ -188,9 +192,8 @@ exports.updateProfile = async function(req, res) {
             res.json(user);
         }
     } catch (err) {
-        return res.status(400).json({
-            msg: "Erreurs serveur"
-        })
+        console.error(err.message)
+        res.status(500).send('Erreur serveur')
     }
 }
 
@@ -207,7 +210,7 @@ exports.listUsers = async function(req, res) {
         const users = await User.find().select('-password');
         res.json(users);
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
         res.status(500).send('Erreur serveur');
     }
 }
@@ -226,7 +229,7 @@ exports.deleteUser = async function(req, res) {
 
         // Check if user exists:
         if(!user){
-            return res.status(404).json({ msg: 'Utilisateur inconnu' });
+            return res.status(404).json({ msg: 'Utilisateur non trouve' });
         }
 
         await user.remove();
