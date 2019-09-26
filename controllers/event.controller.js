@@ -325,3 +325,68 @@ exports.refuseEvent = async function(req, res) {
         res.status(500).send('Erreur Serveur');
     }
 }
+
+exports.comment = async function (req, res) {
+    try {
+        const event = await Event.findById(req.params.id);
+        const comment = {
+            content: req.body.content,
+            user: req.user.id,
+        };
+
+        event.comments.push(comment);
+        await event.save();
+        res.json(event.comments);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur');
+    }
+}
+
+exports.updateComment = async function (req, res) {
+    try {
+        const user = req.user.id;
+        const event = await Event.findById(req.params.event_id);
+        const comment = event.comments.find(comment => comment.id === req.params.comment_id);
+        const { content } = req.body;
+
+        if (!comment)
+            return res.status(404).send("Ce commentaire n'existe pas");
+
+        if (comment.user.toString() === user || user.admin) {
+            if(content) comment.content = content;
+            await event.save();
+            res.json(event.comments);
+        } else {
+            return res.status(401).send("Vous n'avez pas les droits pour cet action");
+        }
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur');
+    }
+}
+
+exports.deleteComment = async function (req, res) {
+    try {
+        const event = await Event.findById(req.params.event_id);
+        const comment = event.comments.find(comment => comment.id === req.params.comment_id);
+        const user = req.user.id;
+
+        if (!comment)
+            return res.status(404).send("Ce commenatire n'existe pas");
+
+        if (comment.user.toString() !== user)
+            return res.status(401).send("Vous n'avez pas les droits pour cet action");
+
+        const removeIndex = event.comments.map(comment => comment.user.toString()).indexOf(req.user.id);
+
+        event.comments.splice(removeIndex, 1);
+        await event.save();
+        res.json(event.comments);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur');
+    }
+}
