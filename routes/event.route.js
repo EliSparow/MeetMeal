@@ -9,6 +9,7 @@ router.post('/create', auth, EventController.create);
 router.get('/:id', auth, EventController.showEvent);
 router.get('/', auth, EventController.listEvents);
 router.put('/:id', auth, EventController.updateEvent);
+router.delete('/:id', auth, EventController.DeleteEvent);
 router.put('/:id/validate', auth, admin, EventController.validEvent);
 router.put('/:id/refuse', auth, admin, EventController.refuseEvent);
 router.put('/:id/addGuest', auth, EventController.addGuest);
