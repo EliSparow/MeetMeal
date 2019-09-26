@@ -13,8 +13,8 @@ exports.createOrder = async function(req, res) {
     try {
 
         const { numberOfToques } = req.body;
-        const userID = req.user.id;
-        const user = User.findById(userID.select('-password'))
+        const userId = req.user.id;
+        const user = User.findById(userId).select('-password')
 
         if ( !numberOfToques ) {
             return res.status(400).json({
@@ -23,7 +23,7 @@ exports.createOrder = async function(req, res) {
         }
 
         let order = new Order ({
-            userID,
+            userId,
             numberOfToques,
             createdAt
         });
@@ -46,31 +46,31 @@ exports.createOrder = async function(req, res) {
 
 exports.adminOrder = async function(req, res) {
     try {
-        const { numberOfToques } = req.body;
-        const user = User.findById(req.params.id);
-        require.json(user);
+        const { numberOfToques, userId } = req.body;
+        const user = User.findById(userId);
 
-        if ( !numberOfToques || !user) {
+        if ( !numberOfToques || !userId) {
             return res.status(400).json({
                 msg: "Veuillez renseigner tous les champs."
             })
         }
 
-        let adminOrder = new AdminOrder ({
+        let order = new Order ({
             user,
             numberOfToques,
             createdAt
         });
 
-        await adminOrder.save();
+        await order.save();
         user.toquesAvailable += numberOfToques;
         await user.save();
 
-        res.status(200).json(
-           [{
+        res.status(200).json([
+            {
                msg: 'Commande effectuée.'
-           },
-        user])
+            },
+            user
+        ])
     } catch (err) {
         console.err(err.message);
         res.status(500).send('Erreur serveur');
