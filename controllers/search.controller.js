@@ -44,6 +44,14 @@ exports.user = async function(req, res) {
     }
 }
 
+/**
+ *  This function search an user
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @returns 
+ */
+
 exports.event = async function(req, res) {
     const { searchEvent } =req.body;
     
