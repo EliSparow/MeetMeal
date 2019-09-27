@@ -7,13 +7,14 @@ const Event = require('../models/event.model');
   * 
   * @param {*} req
   * @param {*} res
-  * @returns
+  * @returns res.json({ result })
+  * @access Private
  */
 
 exports.user = async function(req, res) {
-    const { searchUser } = req.body;
+    const { search }  = req.body;
     
-    if(!searchUser) {
+    if(!search) {
         return res.status(400).json({
             msg: "Entrez un mot-cle."
         });
@@ -23,10 +24,10 @@ exports.user = async function(req, res) {
         let result = await User.find({
             $or: [
                 {
-                    firstname: { $regex: searchUser }
+                    firstname: { $regex: search, $options: "i" }
                 }, 
                 {
-                    lastname: { $regex: searchUser.toUpperCase() }
+                    lastname: { $regex: search, $options: "i" }
                 }
             ] , 
         });
@@ -36,13 +37,22 @@ exports.user = async function(req, res) {
                 msg: "Utilisateur non trouve"
             });
         }
-        res.status(200).json({ result })
+        res.status(200).json({result})
     } catch(err){
         res.status(500).json({
             msg: "Erreur Serveur"
         });
     }
 }
+
+/**
+ *  This function search an event
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @returns res.json({ result })
+ * @access Private
+ */
 
 exports.event = async function(req, res) {
     const { searchEvent } =req.body;

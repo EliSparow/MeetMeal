@@ -31,7 +31,7 @@ Technos utilisées:
 - NodeJs
 
 Architecture du repo:
-``
+```
 src
   │   .env                  # Environment variables [TO CREATE]
   │   package.json          
@@ -43,4 +43,4 @@ src
   └───middleware
   └───models                # Database models
   └───tests                 # All the unit tests
-``
+```

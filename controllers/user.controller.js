@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
  * @param {*} req
  * @param {*} res
  * @returns
+ * @access Public
  */
 
 exports.register = async function(req, res) {
@@ -69,6 +70,7 @@ exports.register = async function(req, res) {
  * @param {*} req
  * @param {*} res
  * @returns
+ * @access Public
  */
 
 exports.login = async function(req, res) {
@@ -128,9 +130,11 @@ exports.login = async function(req, res) {
  *
  * @param {*} req
  * @param {*} res
+ * @returns json(user)
+ * @access Private
  */
 
-exports.profile = async function(req, res) {
+exports.myProfile = async function(req, res) {
     try {
         const user = await User.findById(req.user.id).select('-password');
         res.json(user);
@@ -139,6 +143,34 @@ exports.profile = async function(req, res) {
         res.status(500).send('Erreur serveur');
     }
 }
+
+/**
+ * Get profile by ID
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @returns json(user)
+ * @access Private
+ */
+
+ exports.profile = async function(req, res) {
+     try {
+         const user = await User.findById(req.params.id).select('-password');
+         res.json(user);
+     } catch (err) {
+         console.error(err.message);
+         res.status(500).send('Erreur serveur');
+     }
+ }
+
+ /**
+  * Update profile
+  * 
+  * @param {*} req
+  * @param {*} res
+  * @returns json(user)
+  * @access Private
+  */
 
 exports.updateProfile = async function(req, res) {
     const {
@@ -197,12 +229,12 @@ exports.updateProfile = async function(req, res) {
     }
 }
 
-
 /**
  * Get listUsers
  *
  * @param {*} req
  * @param {*} res
+ * @access Private
  */
 
 exports.listUsers = async function(req, res) {
@@ -214,6 +246,7 @@ exports.listUsers = async function(req, res) {
         res.status(500).send('Erreur serveur');
     }
 }
+
 /**
   * Delete User by ID
   * 
@@ -223,6 +256,7 @@ exports.listUsers = async function(req, res) {
   * @desc Delete User by ID
   * @access Private
  */
+
 exports.deleteUser = async function(req, res) {
     try {
         const user = await User.findById(req.params.id);
