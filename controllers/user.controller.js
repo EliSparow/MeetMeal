@@ -187,7 +187,6 @@ exports.updateProfile = async function(req, res) {
         city,
         toquesAvailable
     } = req.body;
-
     const userProfile = {};
 
     userProfile.user = req.user.id;

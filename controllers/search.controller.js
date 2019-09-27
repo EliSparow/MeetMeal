@@ -51,38 +51,45 @@ exports.user = async function(req, res) {
  * @param {*} req
  * @param {*} res
  * @returns res.json({ result })
- * @access Private
+ * @access Public
  */
 
 exports.event = async function(req, res) {
-    const { searchEvent } =req.body;
-    
-    if(!searchEvent) {
+    const { city, zipCode, date, typeOfMeal, typeOfCuisine } =req.body;
+
+    const search = [];
+
+    if(zipCode) search.push({ zipCode: zipCode })
+    if(city) search.push({ city: { $regex: city, $options: "i" } })
+    if(date) search.push({ date: date })
+    if(typeOfMeal) search.push({ typeOfMeal: { $regex: typeOfMeal, $options: "i" } })
+    if(typeOfCuisine) search.push({ typeOfCuisine: { $regex: typeOfCuisine, $options: "i" } })
+
+    console.log(search);
+
+    if(!search) {
         return res.status(400).json({
             msg: "Entrez un mot-cle"
         });
     }
 
     try {
-        let result = await Event.find({
-            $or: [
-                {
-                    title: { $regex: searchEvent }
-                },
-                {
-                    typeOfCuisine: { $regex: searchEvent }
-                },
-                {
-                    typeOfTheEvent: { $regex: searchEvent }
-                },
-                {
-                    ingredients: { $regex: searchEvent }
-                },
-                {
-                    city: { $regex: searchEvent }
-                }
-            ] ,
-        });
+        let result = await Event.find({$and: search})
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        })
 
         if(result == "") {
             return res.status(404).json({
@@ -91,6 +98,7 @@ exports.event = async function(req, res) {
         }
         res.status(200).json({ result })
     } catch(err){
+        console.log(err);
         res.status(500).json({
             msg: "Erreur Serveur"
         });

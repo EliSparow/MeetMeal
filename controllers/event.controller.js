@@ -251,7 +251,22 @@ exports.refuseGuest = async function (req, res) {
 
 exports.showEvent = async function(req, res) {
     try {
-        const event = await Event.findById(req.params.id);
+        const event = await Event.findById(req.params.id)
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        });
 
         if(!event) {
             return res.status(404).json({
@@ -495,7 +510,7 @@ exports.deleteEvent = async function(res, res) {
             }
         }
 
-        event.remove();
+        await event.remove();
         res.json({
             msg: 'Evenement supprime'
         })
@@ -504,7 +519,7 @@ exports.deleteEvent = async function(res, res) {
         console.error(err.message);
         res.status(500).send('Erreur Serveur')
     }
-}
+};
 
 /**
  * This function shows every events created by an user
@@ -600,4 +615,4 @@ exports.showGuestsEvents = async function (req, res) {
         console.error(err.message);
         res.status(500).send('Erreur Serveur')
     }
-}
+};
