@@ -7,6 +7,6 @@ const SearchController = require ('../controllers/search.controller.js');
 //Search User
 router.post('/users/', auth, SearchController.user);
 //Search Event
-router.post('/event/', auth, SearchController.event);
+router.post('/event/', SearchController.event);
 
 module.exports = router;

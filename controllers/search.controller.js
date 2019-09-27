@@ -51,7 +51,7 @@ exports.user = async function(req, res) {
  * @param {*} req
  * @param {*} res
  * @returns res.json({ result })
- * @access Private
+ * @access Public
  */
 
 exports.event = async function(req, res) {
