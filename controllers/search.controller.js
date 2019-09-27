@@ -74,9 +74,22 @@ exports.event = async function(req, res) {
     }
 
     try {
-        let result = await Event.find({
-            $and: search
-        }).select('_id zipCode typeOfMeal typeOfCuisine city date title')
+        let result = await Event.find({$and: search})
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        })
 
         if(result == "") {
             return res.status(404).json({
