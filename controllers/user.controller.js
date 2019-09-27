@@ -183,11 +183,10 @@ exports.updateProfile = async function(req, res) {
         bio,
         loveStatus,
         zipCode,
-        adress,
+        address,
         city,
         toquesAvailable
     } = req.body;
-
     const userProfile = {};
 
     userProfile.user = req.user.id;
@@ -205,7 +204,7 @@ exports.updateProfile = async function(req, res) {
     if(bio) userProfile.bio = bio;
     if(loveStatus) userProfile.loveStatus = loveStatus;
     if(zipCode) userProfile.zipCode = zipCode;
-    if(adress) userProfile.adress = adress;
+    if(address) userProfile.address = address;
     if(city) userProfile.city = city;
     if(toquesAvailable) userProfile.toquesAvailable = toquesAvailable;
 
