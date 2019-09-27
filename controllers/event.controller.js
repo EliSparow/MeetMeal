@@ -457,6 +457,7 @@ exports.deleteComment = async function (req, res) {
         res.status(500).send('Erreur Serveur');
     }
 }
+
 /**
  * This function delete and event by id
  * 
