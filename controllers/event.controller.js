@@ -68,6 +68,21 @@ exports.create = async function(req, res) {
 exports.listEvents = async function(req, res) {
     try {
         const events = await Event.find()
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        })
 
         if(!events) {
             res.status(400).json({
