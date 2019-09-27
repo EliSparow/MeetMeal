@@ -251,7 +251,22 @@ exports.refuseGuest = async function (req, res) {
 
 exports.showEvent = async function(req, res) {
     try {
-        const event = await Event.findById(req.params.id);
+        const event = await Event.findById(req.params.id)
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        });
 
         if(!event) {
             return res.status(404).json({
@@ -406,7 +421,7 @@ exports.DeleteEvent = async function(res, res) {
             }
         }
 
-        event.remove();
+        await event.remove();
         res.json({
             msg: 'Event supprime'
         })
