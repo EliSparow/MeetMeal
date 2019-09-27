@@ -19,7 +19,7 @@ exports.register = async function(req, res) {
 
         if (!firstname || !lastname || !age || !email || !password) {
             return res.status(400).json({
-                msg: "Tous les champs sont obligatoires."
+                msg: "Tous les champs sont obligatoires"
             });
         };
 
@@ -39,7 +39,7 @@ exports.register = async function(req, res) {
 
         if (user) {
             return res.status(400).json({
-                msg: "L'utilisateur existe deja."
+                msg: "L'utilisateur existe deja"
             })
         };
 
@@ -229,7 +229,7 @@ exports.updateProfile = async function(req, res) {
 }
 
 /**
- * Get listUsers
+ * Get a list of the users
  *
  * @param {*} req
  * @param {*} res
@@ -247,12 +247,12 @@ exports.listUsers = async function(req, res) {
 }
 
 /**
-  * Delete User by ID
+  * Delete user by ID
   * 
   * @param {*} req
   * @param {*} res
   * 
-  * @desc Delete User by ID
+  * @desc Delete user by ID
   * @access Private
  */
 
@@ -266,7 +266,7 @@ exports.deleteUser = async function(req, res) {
         }
 
         await user.remove();
-        res.status(200).json({ msg: 'Utilisateur Supprime' });
+        res.status(200).json({ msg: 'Utilisateur supprime' });
 
     } catch(err){
         console.error(err);

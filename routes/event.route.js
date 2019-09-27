@@ -5,33 +5,41 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const EventController = require('../controllers/event.controller.js');
 
-//create event
+// Create event
 router.post('/create', auth, EventController.create);
-//show event by ID
+// Show event by ID
 router.get('/:id', auth, EventController.showEvent);
-//show event
+// Show all events
 router.get('/', auth, EventController.listEvents);
-//update event
+// Update event
 router.put('/:id', auth, EventController.updateEvent);
 
-//delete event
-router.delete('/:id', auth, EventController.DeleteEvent);
-//validate event
+// Delete event
+router.delete('/:id', auth, EventController.deleteEvent);
+// Validate event
 router.put('/:id/validate', auth, admin, EventController.validEvent);
-//refuse event
+// Refuse event
 router.put('/:id/refuse', auth, admin, EventController.refuseEvent);
 
-//add guest
+// Add guest
 router.put('/:id/addGuest', auth, EventController.addGuest);
-//remove guest
+// Remove guest
 router.put('/:id/removeGuest', auth, EventController.removeGuest);
-//accept guest
+// Accept guest
 router.put('/:event_id/validateGuest/:acceptedGuest_id', auth, EventController.acceptGuest);
-//refuse guest
+// Refuse guest
 router.put('/:event_id/refuseGuest/:refusedGuest_id', auth, EventController.refuseGuest);
 
+// Add comment
 router.post('/:id/comment', auth, EventController.comment);
+// Update comment
 router.put('/:event_id/:comment_id', auth, EventController.updateComment);
+// Delete comment
 router.delete('/:event_id/:comment_id', auth, EventController.deleteComment);
+
+// Show created events by an user
+router.get('/:id/showEvents', EventController.showCreatedEvents);
+// Show the user's guests events
+router.get('/:id/guestsEvents', EventController.showGuestsEvents);
 
 module.exports = router;

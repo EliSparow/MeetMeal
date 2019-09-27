@@ -16,7 +16,7 @@ exports.user = async function(req, res) {
     
     if(!search) {
         return res.status(400).json({
-            msg: "Entrez un mot-cle."
+            msg: "Entrez un mot-cle"
         });
     }
 
@@ -69,7 +69,7 @@ exports.event = async function(req, res) {
 
     if(!search) {
         return res.status(400).json({
-            msg: "Entrez un mot-cle."
+            msg: "Entrez un mot-cle"
         });
     }
 

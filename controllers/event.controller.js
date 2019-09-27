@@ -47,7 +47,7 @@ exports.create = async function(req, res) {
     await event.save()
 
     res.status(200).json({
-        msg: 'Event cree'
+        msg: 'Evenement cree'
     });  
     } catch (err) {
         console.error(err.message);
@@ -228,7 +228,7 @@ exports.refuseGuest = async function (req, res) {
             }
         }
 
-        refusedGuest[0].status = 'Refusé';
+        refusedGuest[0].status = 'Refuse';
         event.save();
         res.json({
             msg: 'Utilisateur refuse'
@@ -393,6 +393,14 @@ exports.refuseEvent = async function(req, res) {
     }
 }
 
+/**
+ * This function create a comment
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns res.json(event.comments)
+ */
+
 exports.comment = async function (req, res) {
     try {
         const event = await Event.findById(req.params.id);
@@ -410,6 +418,14 @@ exports.comment = async function (req, res) {
         res.status(500).send('Erreur Serveur');
     }
 }
+
+/**
+ * This function update a comment
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns res.json(event.comments)
+ */
 
 exports.updateComment = async function (req, res) {
     try {
@@ -434,6 +450,14 @@ exports.updateComment = async function (req, res) {
     }
 }
 
+/**
+ * This function delete a comment
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns res.json(event.comments)
+ */
+
 exports.deleteComment = async function (req, res) {
     try {
         const event = await Event.findById(req.params.event_id);
@@ -441,7 +465,7 @@ exports.deleteComment = async function (req, res) {
         const user = req.user.id;
 
         if (!comment)
-            return res.status(404).send("Ce commenatire n'existe pas");
+            return res.status(404).send("Ce commentaire n'existe pas");
 
         if (comment.user.toString() !== user)
             return res.status(401).send("Vous n'avez pas les droits pour cet action");
@@ -467,7 +491,7 @@ exports.deleteComment = async function (req, res) {
  * @returns res.json({msg})
  */
 
-exports.DeleteEvent = async function(res, res) {
+exports.deleteEvent = async function(res, res) {
     try {
         const event = await Event.findById(req.params.id);
         const user = await User.findById(req.user.id).select('admin');
@@ -488,9 +512,105 @@ exports.DeleteEvent = async function(res, res) {
 
         await event.remove();
         res.json({
-            msg: 'Event supprime'
+            msg: 'Evenement supprime'
         })
 
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur')
+    }
+};
+
+/**
+ * This function shows every events created by an user
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @access Public
+ * @returns res.json(events)
+ */
+
+exports.showCreatedEvents = async function (req, res) {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        const events = await Event.find({ user: user.id })
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                msg: "Utilisateur non trouve"
+            });
+        };
+
+        if (!events) {
+            return res.status(404).json({
+                msg: "Evenements non trouves"
+            });
+        };
+
+        res.json(events);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur')  
+    }
+}
+
+/**
+ * This function shows every events where the user is a guest
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @access Public
+ * @returns res.json(events)
+ */
+
+exports.showGuestsEvents = async function (req, res) {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        const events = await Event.find({'guests.userId': user.id})
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                msg: "Utilisateur non trouve"
+            });
+        };
+
+        if (!events) {
+            return res.status(404).json({
+                msg: "Evenements non trouves"
+            });
+        };
+
+        res.json(events);        
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Erreur Serveur')

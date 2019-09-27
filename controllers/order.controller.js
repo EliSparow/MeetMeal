@@ -2,7 +2,7 @@ const Order = require('../models/order.model');
 const User = require('../models/user.model');
 
 /**
- * Create order
+ * Create an order
  * @param {*} req
  * @param {*} res
  * @access Private
@@ -18,7 +18,7 @@ exports.createOrder = async function(req, res) {
 
         if ( !numberOfToques ) {
             return res.status(400).json({
-                msg: "Veuillez renseigner tout les champs."
+                msg: "Veuillez renseigner tout les champs"
             })
         }
 
@@ -34,7 +34,7 @@ exports.createOrder = async function(req, res) {
 
         res.status(200).json(
             [{
-            msg: 'Commande passée.'
+            msg: 'Commande passee'
             },
             user])
 
@@ -45,7 +45,7 @@ exports.createOrder = async function(req, res) {
 }
 
 /**
- * admin order
+ * Administration of an order
  * @param {*} req
  * @param {*} res
  * @access admin
@@ -59,7 +59,7 @@ exports.adminOrder = async function(req, res) {
 
         if ( !numberOfToques || !userId) {
             return res.status(400).json({
-                msg: "Veuillez renseigner tous les champs."
+                msg: "Veuillez renseigner tous les champs"
             })
         }
 
@@ -75,7 +75,7 @@ exports.adminOrder = async function(req, res) {
 
         res.status(200).json([
             {
-               msg: 'Commande effectuée.'
+               msg: 'Commande effectuee'
             },
             user
         ])
@@ -86,7 +86,7 @@ exports.adminOrder = async function(req, res) {
 }
 
 /**
- * See order
+ * See an order
  * @param {*} req
  * @param {*} res
  * @access Private
@@ -99,7 +99,7 @@ exports.showOrder = async function (req, res) {
 
         if (!order) {
             return res.status(404).json({
-                msg: 'Commande introuvable.'
+                msg: 'Commande introuvable'
             })
         }
 
@@ -124,7 +124,7 @@ exports.userOrders = async function (req, res) {
 
         if (!orders) {
             return res.status(404).json({
-                msg: 'Aucune commande trouvee.'
+                msg: 'Aucune commande trouvee'
             })
         }
 
@@ -136,7 +136,7 @@ exports.userOrders = async function (req, res) {
 }
 
 /**
- * Delete order
+ * Delete an order
  * @param {*} req
  * @param {*} res
  * @access Admin
@@ -172,7 +172,7 @@ exports.deleteOrder = async function(res, req) {
 }
 
 /**
- * List order
+ * List the orders
  * @param {*} req
  * @param {*} res
  * @access Admin
@@ -185,7 +185,7 @@ exports.listOrders = async function (req, res) {
 
         if (!orders) {
             return res.status(404).json({
-                msg: 'Aucune commande trouvee.'
+                msg: 'Aucune commande trouvee'
             })
         }
 
