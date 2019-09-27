@@ -81,7 +81,7 @@ const EventSchema = new mongoose.Schema({
       content: {
         type: String
       },
-      author: {
+      user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
       },
