@@ -1,4 +1,4 @@
-//package requirement
+// Package requirement
 require ('dotenv').config();
 const express = require("express");
 const bodyParser = require ("body-parser");
@@ -8,14 +8,14 @@ const app = express();
 
 
 
-//files requirement
+// Files requirement
 const connectDb = require("./config/connectDb");
 const user = require("./routes/user.route");
 const event = require("./routes/event.route")
 const search = require("./routes/search.route");
 const order = require("./routes/order.route");
 
-//port requirement 
+// Port requirement 
 const port = process.env.PORT;
 
 connectDb();
@@ -43,8 +43,8 @@ app.use(cors({
 }));
 
 // Test Heroku
-app.get('/test', (req,res) => {
-    res.send("<h1>This is Working</h1>")
+app.get('/', (req,res) => {
+    res.send("<h1>API is running</h1>")
 })
 
 app.use("/users", user);
@@ -53,6 +53,6 @@ app.use("/search", search);
 app.use("/orders", order);
 
 app.use(express.json({extended: false}));
-app.listen(port, () => console.log(`server run on port ${port}`));
+app.listen(port, () => console.log(`Server run on port ${port}`));
 
 module.exports = app;
