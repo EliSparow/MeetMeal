@@ -5,17 +5,17 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const OrderController = require('../controllers/order.controller.js');
 
-//Create an order as current user
+// Create an order as current user
 router.post('/create', auth, OrderController.createOrder);
-//AdminCreate an order for a user
+// Admin create an order for a user
 router.post('/adminOrder', auth, admin, OrderController.adminOrder);
-//Read order
+// Read an order
 router.get('/:id', auth, OrderController.showOrder);
-//User's order by userId
+// User's order by userId
 router.get('/userorder/:user_id', auth, OrderController.userOrders);
-//User cancell order
+// User cancell order
 router.delete('/:id', auth, admin, OrderController.deleteOrder);
-//List orders
+// List orders
 router.get('/listorder', auth, admin, OrderController.listOrders);
 
 module.exports = router;
