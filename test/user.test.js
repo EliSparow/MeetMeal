@@ -302,10 +302,3 @@ describe("/create Order", () => {
             });
     });
 });
-describe("/show orders", () => {
-    it("It should show all orders passed", done => {
-        let order = {
-            
-        }
-    })
-})
