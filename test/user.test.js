@@ -264,3 +264,41 @@ describe("/Create Event", () => {
             });
     })
 });
+
+// Order section
+
+describe("/create Order", () => {
+    it("it should Not create Order with the NumberOfToques field empty", done => {
+        let order = {
+            userId = user.id,
+            createdAt = Date.now
+        };
+        chai
+            .request(server)
+            .post("/order/create")
+            .send(order)
+            .set('x-auth-token', token )
+            .end((err,res) => {
+                if (err) done(err);
+                res.should.have.status(400);
+                done();
+            });
+    });
+    it("it SHOULD create order", done => {
+        let order = {
+            userId = user.id,
+            NumberOfToques = 20,
+            createdAt = Date.now
+        };
+        chai
+            .request(server)
+            .post("/order/create")
+            .send(order)
+            .set('x-auth-token', token )
+            .end((err,res) => {
+                if (err) done(err);
+                res.should.have.status(400);
+                done();
+            });
+    });
+});
