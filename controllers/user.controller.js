@@ -105,6 +105,12 @@ exports.login = async function(req, res) {
             });
         }
 
+        if(user.isDesactivated) {
+            return res.status(401).json({
+                msg: 'votre compte est bloqué'
+            });
+        }
+
         const payload = {
             user: {
                 id: user.id
@@ -185,10 +191,11 @@ exports.updateProfile = async function(req, res) {
         zipCode,
         address,
         city,
-        toquesAvailable
+        toquesAvailable,
+        isDesactivated
     } = req.body;
     const userProfile = {};
-
+    
     userProfile.user = req.user.id;
 
     if(firstname) userProfile.firstname = firstname;
@@ -207,6 +214,7 @@ exports.updateProfile = async function(req, res) {
     if(address) userProfile.address = address;
     if(city) userProfile.city = city;
     if(toquesAvailable) userProfile.toquesAvailable = toquesAvailable;
+    if(isDesactivated) userProfile.isDesactivated = isDesactivated;
 
     try {
         let user = await User.findOne({ _id: req.params.id });
