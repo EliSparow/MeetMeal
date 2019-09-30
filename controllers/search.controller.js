@@ -4,7 +4,7 @@ const Event = require('../models/event.model');
 
 /**
   * This function search an user
-  * 
+  *
   * @param {*} req
   * @param {*} res
   * @returns res.json({ result })
@@ -13,7 +13,7 @@ const Event = require('../models/event.model');
 
 exports.user = async function(req, res) {
     const { search }  = req.body;
-    
+
     if(!search) {
         return res.status(400).json({
             msg: "Entrez un mot-cle"
@@ -50,7 +50,7 @@ exports.user = async function(req, res) {
 
 /**
  *  This function search an event
- * 
+ *
  * @param {*} req
  * @param {*} res
  * @returns res.json({ result })
@@ -62,13 +62,11 @@ exports.event = async function(req, res) {
 
     const search = [];
 
-    if(zipCode) search.push({ zipCode: zipCode })
-    if(city) search.push({ city: { $regex: city, $options: "i" } })
-    if(date) search.push({ date: date })
-    if(typeOfMeal) search.push({ typeOfMeal: { $regex: typeOfMeal, $options: "i" } })
-    if(typeOfCuisine) search.push({ typeOfCuisine: { $regex: typeOfCuisine, $options: "i" } })
-
-    console.log(search);
+    if(zipCode != "") search.push({ zipCode: zipCode })
+    if(city != "") search.push({ city: { $regex: city, $options: "i" } })
+    if(date != "") search.push({ date: date })
+    if(typeOfMeal != "") search.push({ typeOfMeal: { $regex: typeOfMeal, $options: "i" } })
+    if(typeOfCuisine != "") search.push({ typeOfCuisine: { $regex: typeOfCuisine, $options: "i" } })
 
     if(!search) {
         return res.status(400).json({
@@ -77,7 +75,8 @@ exports.event = async function(req, res) {
     }
 
     try {
-        let result = await Event.find({$and: search})
+      if (search == "") {
+        var result = await Event.find()
         .populate({
             path: 'user',
             model: User,
@@ -93,6 +92,26 @@ exports.event = async function(req, res) {
             model: User,
             select: 'firstname avatar'
         })
+        console.log(result);
+      }
+      else {
+        var result = await Event.find({$and: search})
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        })
+      }
 
         if(result == "") {
             return res.status(404).json({
