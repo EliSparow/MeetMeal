@@ -42,19 +42,20 @@ exports.register = async function(req, res) {
                 msg: "L'utilisateur existe deja"
             })
         };
+        const avatar = 'https://profilepicturesdp.com/wp-content/uploads/2018/06/avatar-for-profile-picture-2.png';
 
         user = new User({
             firstname,
             lastname,
             age,
             email,
-            password
+            password,
+            avatar
         });
-
+        
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
         await user.save();
-
         res.status(200).json({
             msg: 'Utilisateur enregistre'
         });
@@ -104,6 +105,12 @@ exports.login = async function(req, res) {
                 msg: 'Mot de passe invalide'
             });
         }
+        console.log(user.isDesactivated);
+        if(user.isDesactivated) {
+            user.isDesactivated = false;
+            await user.save();
+            console.log(user);
+        }
 
         const payload = {
             user: {
@@ -116,7 +123,7 @@ exports.login = async function(req, res) {
             process.env.JWT_SECRET, { expiresIn: 360000 },
             (err, token) => {
                 if (err) throw err;
-                res.status(200).json({token });
+                res.status(200).json({ token });
             }
         );
     } catch (err) {
@@ -185,10 +192,11 @@ exports.updateProfile = async function(req, res) {
         zipCode,
         address,
         city,
-        toquesAvailable
+        toquesAvailable,
+        isDesactivated
     } = req.body;
     const userProfile = {};
-
+    
     userProfile.user = req.user.id;
 
     if(firstname) userProfile.firstname = firstname;
@@ -207,6 +215,7 @@ exports.updateProfile = async function(req, res) {
     if(address) userProfile.address = address;
     if(city) userProfile.city = city;
     if(toquesAvailable) userProfile.toquesAvailable = toquesAvailable;
+    if(isDesactivated) userProfile.isDesactivated = isDesactivated;
 
     try {
         let user = await User.findOne({ _id: req.params.id });

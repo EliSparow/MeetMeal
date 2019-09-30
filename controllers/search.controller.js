@@ -22,14 +22,17 @@ exports.user = async function(req, res) {
 
     try {
         let result = await User.find({
-            $or: [
-                {
-                    firstname: { $regex: search, $options: "i" }
-                }, 
-                {
-                    lastname: { $regex: search, $options: "i" }
-                }
-            ] , 
+            $and: [
+                { $or: [
+                    {
+                        firstname: { $regex: search, $options: "i" }
+                    },
+                    {
+                        lastname: { $regex: search, $options: "i" }
+                    }
+                ]},
+                { isDesactivated: false }
+            ]
         });
 
         if(result == "") {

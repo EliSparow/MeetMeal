@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
  * @returns
  */
 
-module.exports = function(req, res, next) {
+module.exports = async function(req, res, next) {
 
     // Get token from header
     const token = req.header('x-auth-token');
@@ -24,8 +24,14 @@ module.exports = function(req, res, next) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         req.user = decoded.user;
-        next();
-    } catch (err) {
+        let user = await User.findById(req.user.id);
+        if (user.isDesactivated == false ){
+            next()
+        }
+        else{
+            return res.status(401).json({ user })
+        }
+        } catch (err) {
         res.status(401).json({ msg: 'Bad token' });
     }
 }
