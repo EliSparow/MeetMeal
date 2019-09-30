@@ -30,7 +30,7 @@ describe("/Register User", () => {
             .end((err, res) => {
                 res.should.have.status(400);
                 res.body.should.be.a("object");
-                res.body.should.have.property("msg").eql("Tous les champs sont obligatoires.");
+                res.body.should.have.property("msg").eql("Tous les champs sont obligatoires");
                 done();
             });
     });
@@ -153,22 +153,17 @@ describe("/PUT/my-profile/", () => {
             const payload = {
                 user: user.id
             }
-            jwt.sign(
-                payload,
-                process.env.JWT_SECRET, { expiresIn: 360000 },
-                (err, token) => {
-                    chai
-                        .request(server)
-                        .put("/users/" + user.id)
-                        .set('x-auth-token', token)
-                        .send(userUpdate)
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                            res.body.should.be.a("object");
-                            res.body.should.have.property("firstname").eql("TestOK");
-                            done();
-                        });
-                });
+                chai
+                    .request(server)
+                    .put("/users/" + user.id)
+                    .set('x-auth-token',token)
+                    .send(userUpdate)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a("object");
+                        res.body.should.have.property("firstname").eql("TestOK");
+                        done();
+                    });
         });
     });
 });
@@ -196,7 +191,7 @@ describe("/DELETE/:id User", () => {
                         if (err) done(err);
                         res.should.have.status(200);
                         res.body.should.be.a("object");
-                        res.body.should.have.property("msg").eql("Utilisateur Supprime");
+                        res.body.should.have.property("msg").eql("Utilisateur supprime");
                         done();
                     });
             });
