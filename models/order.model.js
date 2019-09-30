@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema({
         ref: 'user',
         required : true
     },
-    numberToques: {
+    numberOfToques: {
         type: Number,
         required : true
     },

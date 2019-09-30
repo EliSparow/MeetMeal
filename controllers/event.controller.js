@@ -47,7 +47,7 @@ exports.create = async function(req, res) {
     await event.save()
 
     res.status(200).json({
-        msg: 'Event cree'
+        msg: 'Evenement cree'
     });  
     } catch (err) {
         console.error(err.message);
@@ -68,6 +68,21 @@ exports.create = async function(req, res) {
 exports.listEvents = async function(req, res) {
     try {
         const events = await Event.find()
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        })
 
         if(!events) {
             res.status(400).json({
@@ -213,7 +228,7 @@ exports.refuseGuest = async function (req, res) {
             }
         }
 
-        refusedGuest[0].status = 'Refusé';
+        refusedGuest[0].status = 'Refuse';
         event.save();
         res.json({
             msg: 'Utilisateur refuse'
@@ -236,7 +251,22 @@ exports.refuseGuest = async function (req, res) {
 
 exports.showEvent = async function(req, res) {
     try {
-        const event = await Event.findById(req.params.id);
+        const event = await Event.findById(req.params.id)
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        });
 
         if(!event) {
             return res.status(404).json({
@@ -364,6 +394,95 @@ exports.refuseEvent = async function(req, res) {
 }
 
 /**
+ * This function create a comment
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns res.json(event.comments)
+ */
+
+exports.comment = async function (req, res) {
+    try {
+        const event = await Event.findById(req.params.id);
+        const comment = {
+            content: req.body.content,
+            user: req.user.id,
+        };
+
+        event.comments.push(comment);
+        await event.save();
+        res.json(event.comments);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur');
+    }
+}
+
+/**
+ * This function update a comment
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns res.json(event.comments)
+ */
+
+exports.updateComment = async function (req, res) {
+    try {
+        const user = req.user.id;
+        const event = await Event.findById(req.params.event_id);
+        const comment = event.comments.find(comment => comment.id === req.params.comment_id);
+        const { content } = req.body;
+
+        if (!comment)
+            return res.status(404).send("Ce commentaire n'existe pas");
+
+        if (comment.user.toString() === user || user.admin) {
+            if(content) comment.content = content;
+            await event.save();
+            res.json(event.comments);
+        } else {
+            return res.status(401).send("Vous n'avez pas les droits pour cet action");
+        }
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur');
+    }
+}
+
+/**
+ * This function delete a comment
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns res.json(event.comments)
+ */
+
+exports.deleteComment = async function (req, res) {
+    try {
+        const event = await Event.findById(req.params.event_id);
+        const comment = event.comments.find(comment => comment.id === req.params.comment_id);
+        const user = req.user.id;
+
+        if (!comment)
+            return res.status(404).send("Ce commentaire n'existe pas");
+
+        if (comment.user.toString() !== user)
+            return res.status(401).send("Vous n'avez pas les droits pour cet action");
+
+        const removeIndex = event.comments.map(comment => comment.user.toString()).indexOf(req.user.id);
+
+        event.comments.splice(removeIndex, 1);
+        await event.save();
+        res.json(event.comments);
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur');
+    }
+}
+
+/**
  * This function delete and event by id
  * 
  * @param {*} req
@@ -372,7 +491,7 @@ exports.refuseEvent = async function(req, res) {
  * @returns res.json({msg})
  */
 
-exports.DeleteEvent = async function(res, res) {
+exports.deleteEvent = async function(res, res) {
     try {
         const event = await Event.findById(req.params.id);
         const user = await User.findById(req.user.id).select('admin');
@@ -391,13 +510,109 @@ exports.DeleteEvent = async function(res, res) {
             }
         }
 
-        event.remove();
+        await event.remove();
         res.json({
-            msg: 'Event supprime'
+            msg: 'Evenement supprime'
         })
 
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Erreur Serveur')
     }
+};
+
+/**
+ * This function shows every events created by an user
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @access Public
+ * @returns res.json(events)
+ */
+
+exports.showCreatedEvents = async function (req, res) {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        const events = await Event.find({ user: user.id })
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                msg: "Utilisateur non trouve"
+            });
+        };
+
+        if (!events) {
+            return res.status(404).json({
+                msg: "Evenements non trouves"
+            });
+        };
+
+        res.json(events);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur')  
+    }
 }
+
+/**
+ * This function shows every events where the user is a guest
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @access Public
+ * @returns res.json(events)
+ */
+
+exports.showGuestsEvents = async function (req, res) {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        const events = await Event.find({'guests.userId': user.id})
+        .populate({
+            path: 'user',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'guests.userId',
+            model: User,
+            select: 'firstname avatar'
+        })
+        .populate({
+            path: 'comments.user',
+            model: User,
+            select: 'firstname avatar'
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                msg: "Utilisateur non trouve"
+            });
+        };
+
+        if (!events) {
+            return res.status(404).json({
+                msg: "Evenements non trouves"
+            });
+        };
+
+        res.json(events);        
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erreur Serveur')
+    }
+};

@@ -4,7 +4,7 @@ const router = express.Router();
 const auth = require ('../middleware/auth');
 const SearchController = require ('../controllers/search.controller.js');
 
-//Search User
+// Search User
 router.post('/users/', auth, SearchController.user);
 //Search Event
 router.post('/event/', SearchController.event);

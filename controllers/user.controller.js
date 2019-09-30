@@ -19,7 +19,7 @@ exports.register = async function(req, res) {
 
         if (!firstname || !lastname || !age || !email || !password) {
             return res.status(400).json({
-                msg: "Tous les champs sont obligatoires."
+                msg: "Tous les champs sont obligatoires"
             });
         };
 
@@ -39,22 +39,23 @@ exports.register = async function(req, res) {
 
         if (user) {
             return res.status(400).json({
-                msg: "L'utilisateur existe deja."
+                msg: "L'utilisateur existe deja"
             })
         };
+        const avatar = 'https://profilepicturesdp.com/wp-content/uploads/2018/06/avatar-for-profile-picture-2.png';
 
         user = new User({
             firstname,
             lastname,
             age,
             email,
-            password
+            password,
+            avatar
         });
-
+        
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
         await user.save();
-
         res.status(200).json({
             msg: 'Utilisateur enregistre'
         });
@@ -104,6 +105,12 @@ exports.login = async function(req, res) {
                 msg: 'Mot de passe invalide'
             });
         }
+        console.log(user.isDesactivated);
+        if(user.isDesactivated) {
+            user.isDesactivated = false;
+            await user.save();
+            console.log(user);
+        }
 
         const payload = {
             user: {
@@ -116,7 +123,7 @@ exports.login = async function(req, res) {
             process.env.JWT_SECRET, { expiresIn: 360000 },
             (err, token) => {
                 if (err) throw err;
-                res.status(200).json({token });
+                res.status(200).json({ token });
             }
         );
     } catch (err) {
@@ -183,13 +190,13 @@ exports.updateProfile = async function(req, res) {
         bio,
         loveStatus,
         zipCode,
-        adress,
+        address,
         city,
-        toquesAvailable
+        toquesAvailable,
+        isDesactivated
     } = req.body;
-
     const userProfile = {};
-
+    
     userProfile.user = req.user.id;
 
     if(firstname) userProfile.firstname = firstname;
@@ -205,9 +212,10 @@ exports.updateProfile = async function(req, res) {
     if(bio) userProfile.bio = bio;
     if(loveStatus) userProfile.loveStatus = loveStatus;
     if(zipCode) userProfile.zipCode = zipCode;
-    if(adress) userProfile.adress = adress;
+    if(address) userProfile.address = address;
     if(city) userProfile.city = city;
     if(toquesAvailable) userProfile.toquesAvailable = toquesAvailable;
+    if(isDesactivated) userProfile.isDesactivated = isDesactivated;
 
     try {
         let user = await User.findOne({ _id: req.params.id });
@@ -230,7 +238,7 @@ exports.updateProfile = async function(req, res) {
 }
 
 /**
- * Get listUsers
+ * Get a list of the users
  *
  * @param {*} req
  * @param {*} res
@@ -248,12 +256,12 @@ exports.listUsers = async function(req, res) {
 }
 
 /**
-  * Delete User by ID
+  * Delete user by ID
   * 
   * @param {*} req
   * @param {*} res
   * 
-  * @desc Delete User by ID
+  * @desc Delete user by ID
   * @access Private
  */
 
@@ -267,7 +275,7 @@ exports.deleteUser = async function(req, res) {
         }
 
         await user.remove();
-        res.status(200).json({ msg: 'Utilisateur Supprime' });
+        res.status(200).json({ msg: 'Utilisateur supprime' });
 
     } catch(err){
         console.error(err);
