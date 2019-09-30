@@ -105,11 +105,9 @@ exports.login = async function(req, res) {
                 msg: 'Mot de passe invalide'
             });
         }
-        console.log(user.isDesactivated);
         if(user.isDesactivated) {
             user.isDesactivated = false;
             await user.save();
-            console.log(user);
         }
 
         const payload = {

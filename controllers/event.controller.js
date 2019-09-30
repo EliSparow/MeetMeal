@@ -295,7 +295,7 @@ exports.showEvent = async function(req, res) {
         let event = await Event.findById(req.params.id);
         const user = await User.findById(req.user.id).select('admin');
         const { title, date, hour, minutes, typeOfCuisine, typeOfMeal, description, menu, allergens, zipCode, address, city, numberMaxOfGuests, cost } = req.body;
-
+        
         if(!event) {
             return res.status(404).json({
                 msg: 'Evenement non trouve'
@@ -313,8 +313,8 @@ exports.showEvent = async function(req, res) {
 
         if(title && event.title != title) event.title = title;
         if(date && event.date != date) event.date = date;
-        if(hour && event.hour != hour) event.hour = hour;
-        if(minutes && event.minutes != minutes) event.minutes = minutes;
+        if(hour && event.time.hour != hour) event.time.hour = hour;
+        if(minutes && event.time.minutes != minutes) event.time.minutes = minutes;
         if(typeOfCuisine && event.typeOfCuisine != typeOfCuisine) event.typeOfCuisine = typeOfCuisine;
         if(typeOfMeal && event.typeOfMeal != typeOfMeal) event.typeOfMeal = typeOfMeal;
         if(description && event.description != description) event.description = description;
