@@ -532,8 +532,7 @@ exports.deleteEvent = async function(res, res) {
 
 exports.showCreatedEvents = async function (req, res) {
     try {
-        const user = await User.findById(req.params.id).select('-password');
-        const events = await Event.find({ user: user.id })
+        const events = await Event.find({ user: req.params.id })
         .populate({
             path: 'user',
             model: User,
@@ -550,17 +549,12 @@ exports.showCreatedEvents = async function (req, res) {
             select: 'firstname avatar'
         });
 
-        if (!user) {
-            return res.status(404).json({
-                msg: "Utilisateur non trouve"
-            });
-        };
-
-        if (!events) {
+        if (events.length == 0) {
             return res.status(404).json({
                 msg: "Evenements non trouves"
             });
         };
+        
 
         res.json(events);
     } catch (err) {
@@ -580,8 +574,7 @@ exports.showCreatedEvents = async function (req, res) {
 
 exports.showGuestsEvents = async function (req, res) {
     try {
-        const user = await User.findById(req.params.id).select('-password');
-        const events = await Event.find({'guests.userId': user.id})
+        const events = await Event.find({ user: req.params.id })
         .populate({
             path: 'user',
             model: User,
@@ -598,13 +591,7 @@ exports.showGuestsEvents = async function (req, res) {
             select: 'firstname avatar'
         });
 
-        if (!user) {
-            return res.status(404).json({
-                msg: "Utilisateur non trouve"
-            });
-        };
-
-        if (!events) {
+        if (events.length == 0) {
             return res.status(404).json({
                 msg: "Evenements non trouves"
             });
