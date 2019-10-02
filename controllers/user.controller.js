@@ -15,8 +15,7 @@ const jwt = require('jsonwebtoken');
 exports.register = async function(req, res) {
     try {
 
-        let { firstname, lastname, age, email, password } = req.body;
-
+        let { firstname, lastname, age, email, password, admin } = req.body;
         if (!firstname || !lastname || !age || !email || !password) {
             return res.status(400).json({
                 msg: "Tous les champs sont obligatoires"
@@ -50,7 +49,8 @@ exports.register = async function(req, res) {
             age,
             email,
             password,
-            avatar
+            avatar,
+            admin
         });
         
         const salt = await bcrypt.genSalt(10);
