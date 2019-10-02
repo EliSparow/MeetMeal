@@ -121,7 +121,7 @@ exports.login = async function(req, res) {
             process.env.JWT_SECRET, { expiresIn: 360000 },
             (err, token) => {
                 if (err) throw err;
-                res.status(200).json({ token });
+                res.status(200).json({ token, user });
             }
         );
     } catch (err) {
@@ -196,7 +196,6 @@ exports.updateProfile = async function(req, res) {
     const userProfile = {};
     
     userProfile.user = req.user.id;
-
     if(firstname) userProfile.firstname = firstname;
     if(lastname) userProfile.lastname = lastname;
     if(age) userProfile.age = age;
