@@ -3,12 +3,17 @@ const Event = require('../models/event.model');
 
 
 /**
-  * This function search an user
-  *
-  * @param {*} req
-  * @param {*} res
-  * @returns res.json({ result })
-  * @access Private
+ * @api {post} /search/users user
+ * @apiName user
+ * @apiGroup search
+ * @apiDescription Cette fonction permet d'afficher les utilisateurs recherches
+ *
+ * @apiParam search Mot(s)-cle(s) entres par l'utilisateur pour rechercher un autre utilisateur enregistre
+ * 
+ * @apiSuccess {object} result Affichage des utilisateurs enregistres correspondant a la recherche de l'utilisateur
+ * 
+ * @apiError ChampVide Entrer obligatoirement un mot-cle pour effectuer une recherche
+ * @apiError UtilisateurIntrouvable L'utilisateur n'a pas ete trouve
  */
 
 exports.user = async function(req, res) {
@@ -49,12 +54,17 @@ exports.user = async function(req, res) {
 }
 
 /**
- *  This function search an event
+ * @api {post} /search/event event
+ * @apiName event
+ * @apiGroup search
+ * @apiDescription Cette fonction permet d'afficher les evenements recherches
  *
- * @param {*} req
- * @param {*} res
- * @returns res.json({ result })
- * @access Public
+ * @apiParam {String[]} result Tableau contenant les mots-cles de l'utilisateur recherchant un ou des evenement(s)
+ * 
+ * @apiSuccess {object} result Affichage des evenements crees correspondant a la recherche de l'utilisateur
+ * 
+ * @apiError ChampVide Entrer obligatoirement un mot-cle pour effectuer une recherche
+ * @apiError EvenementIntrouvable L'evenement n'a pas ete trouve
  */
 
 exports.event = async function(req, res) {
