@@ -4,12 +4,35 @@ const { check } = require('express-validator');
 
 
 /**
- * This function creates an event
+ * @api {post} /events/create create
+ * @apiName create
+ * @apiGroup events
+ * @apiDescription Cette fonction cree un nouvel evenement
  * 
- * @param {*} req
- * @param {*} res
- * @access Private
- * @returns res.json(event)
+ * @apiParam {String} id Id de l'utilisateur
+ * @apiParam {String} title Titre de l'evenement
+ * @apiParam {Date} date Date de l'evenement
+ * @apiParam {Number} hour Heure de l'evenement
+ * @apiParam {Number} minutes Minutes de l'evenement
+ * @apiParam {String} typeOfCuisine Type de l'evenement (dejeuner, brunch, diner...)
+ * @apiParam {String} typeOfMeal Type de cuisine (indien, francais, linanais...)
+ * @apiParam {Number} zipCode Code postal du lieu de l'evenement
+ * @apiParam {String} address Adresse du lieu de l'evenement
+ * @apiParam {String} city Ville du lieu de l'evenement
+ * @apiParam {String} description Description de l'evenement
+ * @apiParam {String} menu Menu propose lors de l'evenement
+ * @apiParam {String} allergens Risques d'allergies liees au menu
+ * @apiParam {Number} numberMaxOfGuests Nombre maximal d'invite pour l'evenement
+ * @apiParam {Number} cost Cout pour chaque invite de l'evenement
+ * 
+ * @apiSuccess {object} event Evenement cree
+ * @apiSuccessExample {json} Success-Response
+ *      HTTP/1.1 200 OK
+ *      {
+ *          "msg" : "Evenement cree"
+ *      }
+ * 
+ * @apiError ChampsObligatoires Un certains nombre de champs sont obligatoires
  */
 
 exports.create = async function(req, res) {
@@ -57,12 +80,14 @@ exports.create = async function(req, res) {
 }
 
 /**
- * This function lists all events
+ * @api {get} /events listEvents
+ * @apiName listEvents
+ * @apiGroup events
+ * @apiDescription Cette fonction liste l'ensemble des evenements disponibles
  * 
- * @param {*} req
- * @param {*} res
- * @access Private
- * @returns res.json(events)
+ * @apiSuccess {object} events Evenements trouves
+ * 
+ * @apiError AucunEvenements Aucun evenement n'est disponible
  */
 
 exports.listEvents = async function(req, res) {
@@ -99,12 +124,25 @@ exports.listEvents = async function(req, res) {
 }
 
 /**
- * This function add a guest to an event
- *
- * @param {*} req
- * @param {*} res
- * @access Private
- * @returns res.json(guests)
+ * @api {put} /events/:id/addGuest addGuest
+ * @apiName addGuest
+ * @apiGroup events
+ * @apiDescription Permet a un utilisateur connecte de s'ajouter a un evenement
+ * 
+ * @apiParam id Id de l'utilisateur connecte
+ * @apiParam id Id de l'evenement concerne
+ * 
+ * @apiSuccess {object} event Mise a jour de l'evenement
+ * 
+ * @apiError NombreMaximalAtteint Nombre maximum d'invites deja atteint
+ * @apiError UtilisateurDejaInscrit L'utilisateur connecte est deja ajoute a l'evenement
+ * @apiError ImpossibleDeRejoindre L'utilisateur ayant cree l'evenement ne peut pas rejoindre son propre evenement comme invite
+ * 
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 400 KO
+ *      {
+ *          "msg" : "Nombre maximum d'invites deja atteint"
+ *      }
  */
 
 exports.addGuest = async function (req, res) {
@@ -135,12 +173,25 @@ exports.addGuest = async function (req, res) {
 }
 
 /**
- * This function remove a guest from an event
- *
- * @param {*} req
- * @param {*} res
- * @access Private
- * @returns res.json(guests)
+ * @api {put} /events/:id/removeGuest removeGuest
+ * @apiName removeGuest
+ * @apiGroup events
+ * @apiDescription Permet a un utilisateur connecte de se retirer d'un evenement
+ * 
+ * @apiParam id Id de l'utilisateur connecte
+ * @apiParam id Id de l'evenement concerne
+ * 
+ * @apiSuccess {object} event Mise a jour de l'evenement
+ * 
+ * @apiError NombreMaximalAtteint Nombre maximum d'invites deja atteint
+ * @apiError UtilisateurDejaInscrit L'utilisateur connecte est deja ajoute a l'evenement
+ * @apiError ImpossibleDeRejoindre L'utilisateur ayant cree l'evenement ne peut pas rejoindre son propre evenement comme invite
+ * 
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 400 KO
+ *      {
+ *          "msg" : "Nombre maximum d'invites deja atteint"
+ *      }
  */
 
 exports.removeGuest = async function (req, res) {
@@ -169,12 +220,29 @@ exports.removeGuest = async function (req, res) {
 }
 
 /**
- * This function change the status of a guest to "Accepté"
- *
- * @param {*} req
- * @param {*} res
- * @access Private
- * @returns res.json(acceptedGuest[0].status)
+ * @api {put} /events/:event_id/validateGuest/:acceptedGuest_id acceptGuest
+ * @apiName acceptGuest
+ * @apiGroup events
+ * @apiDescription Permet a un utilisateur ayant cree un evenement ou un admin d'accepter un utilisateur
+ * 
+ * @apiParam event_id Id de l'evenement concerne
+ * @apiParam acceptedGuest_id Id de l'utilisateur connecte
+ * 
+ * @apiSuccess {object} event Mise a jour du statut de l'invite sur l'evenement en "Accepte"
+ * 
+ * @apiSuccessExample {json} Success-Response
+ *      HTTP/1.1 200 OK
+ *      {
+ *          "msg" : "Utilisateur accepte"
+ *      }
+ * 
+ * @apiError AccesRefuse L'utilisateur connecte n'est pas en droit de modifier le statut de l'invite
+ * 
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 400 KO
+ *      {
+ *          "msg" : "Acces refuse"
+ *      }
  */
 
 exports.acceptGuest = async function (req, res) {
@@ -205,12 +273,29 @@ exports.acceptGuest = async function (req, res) {
 }
 
 /**
- * This function change the status of a guest to "Refusé"
- *
- * @param {*} req
- * @param {*} res
- * @access Private
- * @returns res.json(acceptedGuest[0].status)
+ * @api {put} /events/:event_id/refuseGuest/:refusedGuest_id refuseGuest
+ * @apiName refuseGuest
+ * @apiGroup events
+ * @apiDescription Permet a un utilisateur ayant cree un evenement ou un admin de refuser un utilisateur
+ * 
+ * @apiParam event_id Id de l'evenement concerne
+ * @apiParam acceptedGuest_id Id de l'utilisateur connecte
+ * 
+ * @apiSuccess {object} event Mise a jour du statut de l'invite sur l'evenement en "Refuse"
+ * 
+ * @apiSuccessExample {json} Success-Response
+ *      HTTP/1.1 200 OK
+ *      {
+ *          "msg" : "Utilisateur refuse"
+ *      }
+ * 
+ * @apiError AccesRefuse L'utilisateur connecte n'est pas en droit de modifier le statut de l'invite
+ * 
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 400 KO
+ *      {
+ *          "msg" : "Acces refuse"
+ *      }
  */
 
 exports.refuseGuest = async function (req, res) {
@@ -241,12 +326,21 @@ exports.refuseGuest = async function (req, res) {
 }
 
 /**
- * This function shows an event
+ * @api {get} /events/:id showEvent
+ * @apiName showEvent
+ * @apiGroup events
+ * @apiDescription Cette fonction affiche un evenement en fonction de son id
+ *
+ * @apiParam id Id de l'evenement concerne
  * 
- * @param {*} req
- * @param {*} res
- * @access Private
- * @returns res.json(event)
+ * @apiSuccess {object} event Evenements trouves
+ * 
+ * @apiError AucunEvenement Aucun evenement ne correspond a l'id donne
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 400 KO
+ *      {
+ *          "msg" : "Evenement non trouve"
+ *      }
  */
 
 exports.showEvent = async function(req, res) {
@@ -282,12 +376,33 @@ exports.showEvent = async function(req, res) {
 }
 
 /**
- * This function updates an event
+ * @api {put} /events/:id updateEvent
+ * @apiName updateEvent
+ * @apiGroup events
+ * @apiDescription Cette fonction permet de mettre a jour un evenement si l'utilisateur est le createur de l'evenement ou un administrateur
  * 
- * @param {*} req
- * @param {*} res
- * @access Private
- * @returns res.json(event)
+ * @apiParam {String} id Id de l'utilisateur connecte
+ * @apiParam {string} id Id de l'evenement concerne
+ * 
+ * @apiParam {String} title Titre mis a jour
+ * @apiParam {Date} date Date mise a jour
+ * @apiParam {Number} hour Heure mise a jour
+ * @apiParam {Number} minutes Minutes mises a jour
+ * @apiParam {String} typeOfCuisine Type de l'evenement mis a jour (dejeuner, brunch, diner...)
+ * @apiParam {String} typeOfMeal Type de cuisine mise a jour (indien, francais, linanais...)
+ * @apiParam {Number} zipCode Code postal mis a jour
+ * @apiParam {String} address Adresse mise a jour
+ * @apiParam {String} city Ville du lieu mis a jour
+ * @apiParam {String} description Description mise a jour
+ * @apiParam {String} menu Menu propose mis a jour
+ * @apiParam {String} allergens Risques d'allergies liees au menu mis a jour
+ * @apiParam {Number} numberMaxOfGuests Nombre maximal d'invite pour l'evenement mis a jour
+ * @apiParam {Number} cost Cout pour chaque invite de l'evenement mis a jour
+ * 
+ * @apiSuccess {object} event Evenement mis a jour
+ * 
+ * @apiError EvenementIntrouvable Aucun evenement ne correspond a l'id donne
+ * @apiError AccesRefuse L'utilisateur connecte n'a pas les droits necessaires pour la mise a jour de l'evenement 
  */
 
  exports.updateEvent = async function(req, res) {
@@ -336,12 +451,21 @@ exports.showEvent = async function(req, res) {
  }
 
 /**
- * This function validates an event status
+ * @api {put} /events/:id/validate validEvent
+ * @apiName validEvent
+ * @apiGroup events
+ * @apiDescription Cette fonction permet a un administrateur de valider un evenement
+ *
+ * @apiParam id Id de l'evenement concerne
  * 
- * @param {*} req
- * @param {*} res
- * @access Admin
- * @returns res.json(event)
+ * @apiSuccess {object} event Le statut de l'evenement est change de "En attente" a "Accepte"
+ * 
+ * @apiError AucunEvenement Aucun evenement ne correspond a l'id donne
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 400 KO
+ *      {
+ *          "msg" : "Evenement non trouve"
+ *      }
  */
 
 exports.validEvent = async function(req, res) {
@@ -365,12 +489,21 @@ exports.validEvent = async function(req, res) {
 }
 
 /**
- * This function refuses an event status
+ * @api {put} /events/:id/refuse refuseEvent
+ * @apiName refuseEvent
+ * @apiGroup events
+ * @apiDescription Cette fonction permet a un administrateur de refuser un evenement
+ *
+ * @apiParam id Id de l'evenement concerne
  * 
- * @param {*} req
- * @param {*} res
- * @access Admin
- * @returns res.json(event)
+ * @apiSuccess {object} event Le statut de l'evenement est change de "En attente" a "Refuse"
+ * 
+ * @apiError AucunEvenement Aucun evenement ne correspond a l'id donne
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 400 KO
+ *      {
+ *          "msg" : "Evenement non trouve"
+ *      }
  */
 
 exports.refuseEvent = async function(req, res) {
@@ -394,11 +527,16 @@ exports.refuseEvent = async function(req, res) {
 }
 
 /**
- * This function create a comment
+ * @api {post} /events/:id/comment comment
+ * @apiName comment
+ * @apiGroup events
+ * @apiDescription Cette fonction permet a un utilisateur connecte de commenter un evenement
  *
- * @param {*} req
- * @param {*} res
- * @returns res.json(event.comments)
+ * @apiParam id Id de l'evenement concerne
+ * @apiParam id Id de l'utilisateur connecte
+ * @apiParam content Commentaire de l'utilisateur sur l'evenement
+ * 
+ * @apiSuccess {object} event L'evenement a ete mis a jour avec le commentaire de l'utilisateur
  */
 
 exports.comment = async function (req, res) {
@@ -420,11 +558,26 @@ exports.comment = async function (req, res) {
 }
 
 /**
- * This function update a comment
+ * @api {put} /events/:event_id/:comment_id updateComment
+ * @apiName updateComment
+ * @apiGroup events
+ * @apiDescription Cette fonction permet a l'utilisateur qui a commente de mettre a jour son commentaire
  *
- * @param {*} req
- * @param {*} res
- * @returns res.json(event.comments)
+ * @apiParam event_id Id de l'evenement concerne
+ * @apiParam comment_id Id du commentaire concerne
+ * @apiParam id Id de l'utilisateur ayant laisse un commentaire
+ * @apiParam content Commentaire mis a jour de l'utilisateur sur l'evenement
+ * 
+ * @apiSuccess {object} event Le commentaire de l'evenement a ete mis a jour
+ * 
+ * @apiError CommentaireIntrouvable Le commentaire dont l'id a ete passe en parametre n'existe pas
+ * @apiError AccesRefuse L'utilisateur connecte n'a pas les droits de modification
+ * 
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 404 KO
+ *      {
+ *          "msg" : "Ce commentaire n'existe pas"
+ *      }
  */
 
 exports.updateComment = async function (req, res) {
@@ -451,11 +604,25 @@ exports.updateComment = async function (req, res) {
 }
 
 /**
- * This function delete a comment
+ * @api {delete} /events/:event_id/:comment_id deleteComment
+ * @apiName deleteComment
+ * @apiGroup events
+ * @apiDescription Cette fonction permet a l'utilisateur qui a commente de supprimer son commentaire
  *
- * @param {*} req
- * @param {*} res
- * @returns res.json(event.comments)
+ * @apiParam event_id Id de l'evenement concerne
+ * @apiParam comment_id Id du commentaire concerne
+ * @apiParam id Id de l'utilisateur ayant laisse un commentaire
+ * 
+ * @apiSuccess {object} event Le commentaire de l'evenement a ete supprime
+ * 
+ * @apiError CommentaireIntrouvable Le commentaire dont l'id a ete passe en parametre n'existe pas
+ * @apiError AccesRefuse L'utilisateur connecte n'a pas les droits de modification
+ * 
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 404 KO
+ *      {
+ *          "msg" : "Ce commentaire n'existe pas"
+ *      }
  */
 
 exports.deleteComment = async function (req, res) {
@@ -483,12 +650,30 @@ exports.deleteComment = async function (req, res) {
 }
 
 /**
- * This function delete and event by id
+ * @api {delete} /events/:id deleteEvent
+ * @apiName deleteEvent
+ * @apiGroup events
+ * @apiDescription Cette fonction permet a l'utilisateur ayant cree l'evenement ou a un administrateur de supprimer un evenement
+ *
+ * @apiParam id Id de l'evenement concerne
+ * @apiParam id Id de l'utilisateur connecte
  * 
- * @param {*} req
- * @param {*} res
- * @access Private
- * @returns res.json({msg})
+ * @apiSuccess {object} event L'evenement a ete supprime
+ * 
+ * @apiSuccessExample {json} Success-Response
+ *      HTTP/1.1 200 OK
+ *      {
+ *          "msg" : "Evenement supprime"
+ *      }
+ * 
+ * @apiError EvenementIntrouvable L'evenement dont l'id a ete passe en parametre n'existe pas
+ * @apiError AccesRefuse L'utilisateur connecte n'a pas les droits de modification
+ * 
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 404 KO
+ *      {
+ *          "msg" : "Evenement non trouve"
+ *      }
  */
 
 exports.deleteEvent = async function(res, res) {
@@ -522,12 +707,23 @@ exports.deleteEvent = async function(res, res) {
 };
 
 /**
- * This function shows every events created by an user
+ * @api {get} /events/:id/showEvents showCreatedEvents
+ * @apiName showCreatedEvents
+ * @apiGroup events
+ * @apiDescription Cette fonction permet d'afficher les evenements que l'utilisateur dont l'id a ete passe en parametre a cree
+ *
+ * @apiParam id Id de l'utilisateur
  * 
- * @param {*} req
- * @param {*} res
- * @access Public
- * @returns res.json(events)
+ * @apiSuccess {object} events Les evenements cree par l'utilisateur sont affiches
+ * 
+ * @apiError EvenementIntrouvable Aucun evenement n'a ete trouve
+ * @apiError UtilisateurIntrouvable L'utilisateur n'a pas ete trouve
+ * 
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 404 KO
+ *      {
+ *          "msg" : "Evenements non trouves"
+ *      }
  */
 
 exports.showCreatedEvents = async function (req, res) {
@@ -570,12 +766,23 @@ exports.showCreatedEvents = async function (req, res) {
 }
 
 /**
- * This function shows every events where the user is a guest
+ * @api {get} /events/:id/guestsEvents showGuestsEvents
+ * @apiName showGuestsEvents
+ * @apiGroup events
+ * @apiDescription Cette fonction permet d'afficher les evenements que l'utilisateur dont l'id a ete passe en parametre a rejoint
+ *
+ * @apiParam id Id de l'utilisateur
  * 
- * @param {*} req
- * @param {*} res
- * @access Public
- * @returns res.json(events)
+ * @apiSuccess {object} events Les evenements que l'utilisateur a rejoint sont affiches
+ * 
+ * @apiError EvenementIntrouvable Aucun evenement n'a ete trouve
+ * @apiError UtilisateurIntrouvable L'utilisateur n'a pas ete trouve
+ * 
+ * @apiErrorExample {json} Error-Response
+ *      HTTP/1.1 404 KO
+ *      {
+ *          "msg" : "Evenements non trouves"
+ *      }
  */
 
 exports.showGuestsEvents = async function (req, res) {
