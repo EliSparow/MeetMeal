@@ -309,7 +309,7 @@ exports.updateProfile = async function(req, res) {
 
 exports.listUsers = async function(req, res) {
     try {
-        const users = await User.find().select('-password');
+        const users = await User.find().select('-password').where('isDesactivated').equals(false);
         res.json(users);
     } catch (err) {
         console.error(err.message);
