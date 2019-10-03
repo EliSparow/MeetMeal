@@ -183,15 +183,7 @@ exports.addGuest = async function (req, res) {
  * 
  * @apiSuccess {object} event Mise a jour de l'evenement
  * 
- * @apiError NombreMaximalAtteint Nombre maximum d'invites deja atteint
- * @apiError UtilisateurDejaInscrit L'utilisateur connecte est deja ajoute a l'evenement
- * @apiError ImpossibleDeRejoindre L'utilisateur ayant cree l'evenement ne peut pas rejoindre son propre evenement comme invite
- * 
- * @apiErrorExample {json} Error-Response
- *      HTTP/1.1 400 KO
- *      {
- *          "msg" : "Nombre maximum d'invites deja atteint"
- *      }
+ * @apiError AucunUtilisateur Aucun utilisateur ne correspond a l'id passe en parametre
  */
 
 exports.removeGuest = async function (req, res) {

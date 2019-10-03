@@ -668,30 +668,11 @@
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "NombreMaximalAtteint",
-            "description": "<p>Nombre maximum d'invites deja atteint</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UtilisateurDejaInscrit",
-            "description": "<p>L'utilisateur connecte est deja ajoute a l'evenement</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "ImpossibleDeRejoindre",
-            "description": "<p>L'utilisateur ayant cree l'evenement ne peut pas rejoindre son propre evenement comme invite</p>"
+            "field": "AucunUtilisateur",
+            "description": "<p>Aucun utilisateur ne correspond a l'id passe en parametre</p>"
           }
         ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response",
-          "content": "HTTP/1.1 400 KO\n{\n    \"msg\" : \"Nombre maximum d'invites deja atteint\"\n}",
-          "type": "json"
-        }
-      ]
+      }
     },
     "version": "0.0.0",
     "filename": "controllers/event.controller.js",
