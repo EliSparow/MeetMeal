@@ -150,9 +150,10 @@ exports.addGuest = async function (req, res) {
         const user = req.user.id;
         const event = await Event.findById(req.params.id);        
         const guests = event.guests;
-
+        
+        // console.log(guests.filter(guest => guest.status == 'Accepte').length)
         if (guests.length < event.numberMaxOfGuests) {
-            if (guests.filter(guest => guest.userId === user).length == 0) {
+            if (guests.filter(guest => guest.userId == user).length == 0) {
                 if (user != event.user) {
                     guests.push({ userId: user });        
                     await event.save();
