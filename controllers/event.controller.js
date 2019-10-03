@@ -781,7 +781,7 @@ exports.showCreatedEvents = async function (req, res) {
 
 exports.showGuestsEvents = async function (req, res) {
     try {
-        const events = await Event.find({ 'guest.userId': req.params.id })
+        const events = await Event.find({ 'guests.userId': req.params.id })
         .populate({
             path: 'user',
             model: User,
