@@ -3,9 +3,11 @@
 Sujet attribué par une autre équipe qui sera Product Owner du projet. 
 Ce projet a été réalisé selon une méthodologie AGILE sur une durée de **3 semaines**, décomposé en 3 rush d'une semaine.
 
-Lien de l'API en production:
+Version live
+[Meet-Meal](https://meetmeal.netlify.com/)
+
+Lien live de l'API :
 [Dev](https://meetmeal-dev.herokuapp.com/)
-[Prod](https://meetmeal.herokuapp.com/)
 
 Repo Client:
 [MeetMeal-Client](https://github.com/EliSparow/MeetMeal-client)
